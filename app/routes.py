@@ -4,5 +4,12 @@ routes = Blueprint('routes', __name__)
 
 @routes.route('/')
 def home():
-    return "<h1>Rota inicial funcionando!</h1>"
+    return render_template('index.html')
 
+@routes.route('/coordenador')
+def painel_coordenador():
+    return render_template('coordenador.html')
+
+@routes.route('/instrutor')
+def painel_instrutor():
+    return render_template('instrutor.html')

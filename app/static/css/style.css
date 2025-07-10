@@ -1,0 +1,124 @@
+/* static/css/style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #003366;
+    color: white;
+    padding: 10px 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+}
+
+h1 {
+    color: #003366;
+}
+
+button {
+    background-color: #0059b3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #004080;
+}
+
+/* Estilo para botão de cancelar que é um link */
+a.btn-cancelar {
+    display: inline-block;
+    background-color: #888;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+a.btn-cancelar:hover {
+    background-color: #555;
+}
+
+form {
+    background: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ccc;
+    max-width: 400px;
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+form input, form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #e6f0ff;
+}
+
+/* Flash messages - destaque simples */
+.flash-messages {
+    list-style: none;
+    padding: 10px 20px;
+    background-color: #dff0d8;
+    color: #3c763d;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    max-width: 600px;
+}
+
+/* Estilo para os botões dentro de links */
+a button {
+    margin: 10px 0;
+    cursor: pointer;
+}
