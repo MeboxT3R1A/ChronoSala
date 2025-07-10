@@ -1,8 +1,43 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Área do Coordenador{% endblock %}
+{% block title %}Painel do Coordenador{% endblock %}
 
 {% block content %}
-    <h1>Bem-vindo, Coordenador</h1>
-    <p>Aqui você poderá visualizar as salas disponíveis.</p>
+<h1>Painel do Coordenador</h1>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for msg in messages %}
+        <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for sala in salas %}
+    <tr>
+      <td>{{ sala.nome }}</td>
+      <td>{{ sala.status }}</td>
+      <td>
+        <a href="{{ url_for('routes.editar_sala', id=sala.id) }}" class="btn-cancelar">Editar</a>
+
+        <form action="{{ url_for('routes.excluir_sala', id=sala.id) }}" method="POST" style="display:inline;" 
+              onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome }}?');">
+          <button type="submit" style="background-color: #e74c3c; color: white;">Excluir</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
