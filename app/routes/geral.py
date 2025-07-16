@@ -5,4 +5,4 @@ geral = Blueprint('geral', __name__)
 
 @geral.route('/')
 def home():
-    return render_template('login.html')
+    return render_template('loginTeste.html')
