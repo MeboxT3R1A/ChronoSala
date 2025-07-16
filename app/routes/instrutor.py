@@ -4,5 +4,5 @@ from app.db import conectar
 instrutor = Blueprint('instrutor', __name__)
 
 @instrutor.route('/')
-def painel():
+def painel_instrutor():
     return render_template('instrutor.html')

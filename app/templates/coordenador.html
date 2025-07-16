@@ -30,9 +30,9 @@
       <td>{{ sala.nome }}</td>
       <td>{{ sala.status }}</td>
       <td>
-        <a href="{{ url_for('routes.editar_sala', id=sala.id) }}" class="btn-cancelar">Editar</a>
+        <a href="{{ url_for('coordenador.editar_sala', id=sala.id) }}" class="btn-cancelar">Editar</a>
 
-        <form action="{{ url_for('routes.excluir_sala', id=sala.id) }}" method="POST" style="display:inline;" 
+        <form action="{{ url_for('coordenador.excluir_sala', id=sala.id) }}" method="POST" style="display:inline;" 
               onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome }}?');">
           <button type="submit" style="background-color: #e74c3c; color: white;">Excluir</button>
         </form>
@@ -42,24 +42,5 @@
   </tbody>
 </table>
 
-<div id="modalNovaSala" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span onclick="fecharModal()" class="close">&times;</span>
-    <h2>Adicionar Nova Sala</h2>
-    <form method="POST" action="{{ url_for('routes.adicionar_sala') }}">
-      <label for="nome">Nome da Sala:</label>
-      <input type="text" name="nome" required>
 
-      <label for="imagem">Imagem:</label>
-      <select name="imagem" required>
-        <option value="img1.png">img1.png</option>
-        <option value="img2.png">img2.png</option>
-        <option value="img3.png">img3.png</option>
-        <!-- adicione mais conforme o seu sistema -->
-      </select>
-
-      <button type="submit">Adicionar</button>
-    </form>
-  </div>
-</div>
 {% endblock %}
