@@ -1,11 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app.db import conectar
+from flask import  render_template, request, redirect, url_for, flash
+from app.models.db import db
+from . import instrutor_bp
 from datetime import datetime
 from flask import jsonify
 
-instrutor = Blueprint('instrutor', __name__)
-
-@instrutor.route('/')
+@instrutor_bp.route('/')
 def painel_instrutor():
     try:
         with conectar() as conexao:
@@ -23,7 +22,7 @@ def painel_instrutor():
         print("Erro ao carregar painel do instrutor:", e)
         return f"Erro: {e}"
     
-@instrutor.route('/reservar', methods=['POST'])
+@instrutor_bp.route('/reservar', methods=['POST'])
 def criar_reserva():
     try:
         sala_id = request.form['sala_id']
