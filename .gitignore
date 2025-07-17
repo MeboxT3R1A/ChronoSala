@@ -3,5 +3,5 @@ __pycache__/
 *.pyc
 .env
 *.db
-db.py
+.venv/
 teste.txt
