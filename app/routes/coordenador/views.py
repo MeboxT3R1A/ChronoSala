@@ -1,7 +1,6 @@
 # app/routes/coordenador/views.py
 from flask import render_template, request, redirect, url_for, flash
-from app.models.db import db # CORREÇÃO: Importe a instância 'db' do Flask-SQLAlchemy
-                      # Agora 'db' é o seu objeto SQLAlchemy, não a função 'conectar'
+from app.models.db import db 
 
 # Importe os modelos que você usará neste Blueprint
 # CERTIFIQUE-SE de que o caminho para models.py está correto.
@@ -25,7 +24,7 @@ def painel_coordenador():
         print(f"Erro ao acessar banco de dados: {e}")
         flash(f"Erro ao carregar salas: {e}", 'danger')
         # Certifique-se que 'geral_bp.index' é um endpoint válido para redirecionar em caso de erro
-        return redirect(url_for('geral_bp.index'))
+        return redirect(url_for('geral.index'))
 
 
 # NOTA: O ID da sala na sua DDL é 'nome_sala' (VARCHAR).
@@ -66,14 +65,6 @@ def editar_sala(nome_sala):
                 flash(f'Erro: O nome da sala "{novo_nome}" já existe.', 'danger')
                 return redirect(url_for('coordenador_bp.editar_sala', nome_sala=nome_sala))
 
-            # Atualiza os atributos do objeto sala
-            # CUIDADO: Se você permitir mudar a PK (nome_sala), é mais complexo.
-            # O SQLAlchemy trata bem a mudança de PK, mas pode requerer uma nova instância
-            # para evitar conflitos se o novo_nome já existir ANTES do commit.
-            # Para simplificar, vou assumir que você está atualizando os campos.
-            # Se 'nome_sala' pode ser alterado, o código deve ser mais robusto,
-            # talvez deletando a antiga e criando uma nova, ou fazendo um UPDATE direto se for MySQL.
-            # No MySQL, renomear uma PK string é um UPDATE.
 
             # Se o nome da sala (PK) pode ser alterado:
             if novo_nome != sala.nome_sala:
