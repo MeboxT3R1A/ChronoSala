@@ -4,6 +4,9 @@ import os
 from config import DevelopmentConfig, ProductionConfig
 from flask_migrate import Migrate
 
+from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime
+
 from app.models.db import db # CORREÇÃO: Importe a instância 'db' de dentro do pacote 'app'
 
 # Importe seus modelos para que o SQLAlchemy e Flask-Migrate os conheçam
@@ -51,6 +54,36 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 
 def liberar_salas_expiradas():
+    try:
+        now = datetime.now().time()
+        hoje = datetime.now().date()
+
+        with conectar() as conexao:
+            with conexao.cursor() as cursor:
+                # Seleciona salas com reservas finalizadas
+                cursor.execute("""
+                    SELECT sala_id FROM reservas
+                    WHERE data_reserva = %s AND hora_fim <= %s
+                """, (hoje, now))
+
+                salas_para_liberar = cursor.fetchall()
+
+                for row in salas_para_liberar:
+                    sala_id = row[0]
+                    # Atualiza status da sala
+                    cursor.execute("UPDATE sala SET status = 'disponivel' WHERE id = %s", (sala_id,))
+                
+                # Apaga todas as reservas finalizadas
+                cursor.execute("""
+                    DELETE FROM reservas
+                    WHERE data_reserva = %s AND hora_fim <= %s
+                """, (hoje, now))
+            
+            conexao.commit()
+
+    except Exception as e:
+        print("[SCHEDULER ERRO]:", e)
+
     try:
         now = datetime.now().time()
         hoje = datetime.now().date()

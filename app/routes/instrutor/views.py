@@ -3,6 +3,7 @@ from app.models.db import db
 from . import instrutor_bp
 from datetime import datetime
 from flask import jsonify
+import traceback
 
 @instrutor_bp.route('/')
 def painel_instrutor():
@@ -22,61 +23,39 @@ def painel_instrutor():
         print("Erro ao carregar painel do instrutor:", e)
         return f"Erro: {e}"
     
-@instrutor_bp.route('/reservar', methods=['POST'])
-def criar_reserva():
+@instrutor_bp.route('/nova-reserva/<int:sala_id>', methods=['GET', 'POST'])
+def nova_reserva(sala_id):
     try:
-        sala_id = request.form['sala_id']
-        data_reserva = request.form['data_reserva']
-        hora_inicio = request.form['hora_inicio']
-        hora_fim = request.form['hora_fim']
-        responsavel = request.form['responsavel']
-
-        data = datetime.strptime(data_reserva, '%Y-%m-%d').date()
-        inicio = datetime.strptime(hora_inicio, '%H:%M').time()
-        fim = datetime.strptime(hora_fim, '%H:%M').time()
-
-        if fim <= inicio:
-            return jsonify({'success': False, 'message': 'Hora final deve ser após a inicial'})
-
         with conectar() as conexao:
             with conexao.cursor(dictionary=True) as cursor:
-                # Verifica conflito de horário
-                cursor.execute("""
-                    SELECT * FROM reservas 
-                    WHERE sala_id = %s AND data_reserva = %s AND (
-                        (hora_inicio <= %s AND hora_fim > %s) OR
-                        (hora_inicio < %s AND hora_fim >= %s) OR
-                        (hora_inicio >= %s AND hora_fim <= %s)
-                    )
-                """, (sala_id, data_reserva, hora_inicio, hora_inicio, hora_fim, hora_fim, hora_inicio, hora_fim))
+                cursor.execute("SELECT * FROM sala WHERE id = %s", (sala_id,))
+                sala = cursor.fetchone()
 
-                if cursor.fetchone():
-                    return jsonify({'success': False, 'message': 'Conflito com outra reserva!'})
+                if not sala:
+                    return "Sala não encontrada", 404
 
-                # Cria reserva
-                cursor.execute("""
-                    INSERT INTO reservas (sala_id, data_reserva, hora_inicio, hora_fim, responsavel)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, (sala_id, data_reserva, hora_inicio, hora_fim, responsavel))
+        if request.method == 'POST':
+            data_reserva = request.form['data_reserva']
+            hora_inicio = request.form['hora_inicio']
+            hora_fim = request.form['hora_fim']
+            responsavel = request.form['responsavel']
 
-                # Atualiza status da sala
-                status_valido = 'ocupada'  # já está em minúsculas, compatível com ENUM
+            with conectar() as conexao:
+                with conexao.cursor() as cursor:
+                    cursor.execute("""
+                        INSERT INTO reservas (sala_id, data_reserva, hora_inicio, hora_fim, responsavel)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (sala_id, data_reserva, hora_inicio, hora_fim, responsavel))
 
-                print(f"[DEBUG] Atualizando status da sala {sala_id} para '{status_valido}'")
+                    cursor.execute("UPDATE sala SET status = %s WHERE id = %s", ('ocupada', sala_id))
+                    conexao.commit()
 
-                # Garanta que o ID seja inteiro, pois ele vem como string do form
-                sala_id_int = int(sala_id)
+            flash('Reserva criada com sucesso!', 'success')
+            return redirect(url_for('instrutor.painel_instrutor'))
 
-                cursor.execute("UPDATE sala SET status = %s WHERE id = %s",(status_valido, sala_id_int))
-
-                conexao.commit()
+        return render_template('nova_reserva.html', sala=sala)
 
     except Exception as e:
-        import traceback
-    erro_completo = traceback.format_exc()
-    print("Erro na reserva:\n", erro_completo)
-
-    return jsonify({
-        'success': False,
-        'message': f'Erro interno: {str(e)}'  # Isso aparece no popup
-    })
+        print("Erro ao criar reserva:", e)
+        flash('Erro ao processar a reserva', 'error')
+        return redirect(url_for('instrutor.painel_instrutor'))
