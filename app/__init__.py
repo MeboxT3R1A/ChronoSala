@@ -4,7 +4,7 @@ import os
 from config import DevelopmentConfig, ProductionConfig
 from flask_migrate import Migrate
 
-from app.db import db # CORREÇÃO: Importe a instância 'db' de dentro do pacote 'app'
+from app.models.db import db # CORREÇÃO: Importe a instância 'db' de dentro do pacote 'app'
 
 # Importe seus modelos para que o SQLAlchemy e Flask-Migrate os conheçam
 from app.models import models # OU from app.models.models import Funcionario, Sala, ...

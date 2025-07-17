@@ -1,5 +1,5 @@
 from flask import  render_template, request, redirect, url_for, flash
-from app.db import conectar
+from app.models.db import conectar
 from . import instrutor_bp
 
 @instrutor_bp.route('/')

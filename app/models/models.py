@@ -1,5 +1,5 @@
 # app/models/models.py
-from app.db import db # CORREÇÃO: Importe a instância 'db' de dentro do pacote 'app'
+from app.models.db import db # CORREÇÃO: Importe a instância 'db' de dentro do pacote 'app'
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import Enum
 

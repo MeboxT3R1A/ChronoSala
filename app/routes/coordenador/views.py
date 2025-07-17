@@ -1,6 +1,6 @@
 # app/routes/coordenador/views.py
 from flask import render_template, request, redirect, url_for, flash
-from app.db import db # CORREÇÃO: Importe a instância 'db' do Flask-SQLAlchemy
+from app.models.db import db # CORREÇÃO: Importe a instância 'db' do Flask-SQLAlchemy
                       # Agora 'db' é o seu objeto SQLAlchemy, não a função 'conectar'
 
 # Importe os modelos que você usará neste Blueprint

@@ -13,8 +13,7 @@ class Config:
     # Configuração do banco de dados para Flask-SQLAlchemy
     # Formato para MySQL com PyMySQL (recomendado): mysql+pymysql://user:password@host:port/database_name
     # Use variáveis de ambiente em produção para as credenciais do DB
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-                              'mysql+pymysql://root:lasanha@localhost:3306/ChronoSala'
+    SQLALCHEMY_DATABASE_URI ='mysql+pymysql://root:senac@localhost:3307/ChronoSala'
 
     # Desativa o rastreamento de modificações, o que economiza memória.
     # Se você não precisar de sinais do SQLAlchemy sobre mudanças nos objetos.

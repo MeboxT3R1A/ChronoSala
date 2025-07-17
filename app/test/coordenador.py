@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app.db import conectar
+from app.models.db import conectar
 
 coordenador = Blueprint('coordenador', __name__)
 

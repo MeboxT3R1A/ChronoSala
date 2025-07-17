@@ -5,3 +5,4 @@ __pycache__/
 *.db
 db.py
 texto.txt
+.venv/
