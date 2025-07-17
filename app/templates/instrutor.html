@@ -8,44 +8,15 @@
     {% for sala in salas %}
     <div class="sala-card">
         <img src="{{ url_for('static', filename='img/' ~ (sala.imagem if sala.imagem else 'default.png')) }}" alt="Imagem da sala">
+
         <h2>{{ sala.nome }}</h2>
         <p class="status {{ sala.status | lower }}">{{ sala.status }}</p>
-        <button class="reserva-btn" 
-                data-sala-id="{{ sala.id }}" 
-                data-sala-nome="{{ sala.nome }}"
-                onclick="abrirModalReserva(this.dataset.salaId, this.dataset.salaNome)">
+
+        <!-- NOVO: botão de reservar vai para nova tela -->
+        <a href="{{ url_for('instrutor.nova_reserva', sala_id=sala.id) }}" class="reserva-btn">
             <i class="fas fa-calendar-plus"></i> Reservar
-        </button>
+        </a>
     </div>
     {% endfor %}
 </div>
-
-<!-- Modal de Reserva -->
-<div id="modalReserva" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="fecharModal()">&times;</span>
-        <h2>Reservar Sala: <span id="nomeSala"></span></h2>
-        
-        <form id="formReserva" class="formulario">
-            <input type="hidden" id="salaId" name="sala_id">
-            
-            <label>Data da Reserva:</label>
-            <input type="date" name="data_reserva" required>
-            
-            <label>Hora de Início:</label>
-            <input type="time" name="hora_inicio" min="08:00" max="18:00" required>
-            
-            <label>Hora de Término:</label>
-            <input type="time" name="hora_fim" min="08:00" max="18:00" required>
-            
-            <label>Responsável:</label>
-            <input type="text" name="responsavel" required>
-            
-            <button type="submit">Confirmar Reserva</button>
-        </form>
-    </div>
-</div>
-
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}
-

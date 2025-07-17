@@ -265,3 +265,43 @@ a button {
 .formulario button:hover {
     background-color: #0056b3;
 }
+.reserva-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.formulario-reserva label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.formulario-reserva input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+
+.btn-confirmar {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-voltar {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}

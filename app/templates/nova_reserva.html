@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+
+{% block title %}Nova Reserva{% endblock %}
+
+{% block content %}
+<h1>Reserva para a Sala: {{ sala.nome }}</h1>
+
+<form method="POST">
+    <input type="hidden" name="sala_id" value="{{ sala.id }}">
+
+    <label>Data:</label>
+    <input type="date" name="data_reserva" required>
+
+    <label>Hora de Início:</label>
+    <input type="time" name="hora_inicio" min="08:00" max="18:00" required>
+
+    <label>Hora de Fim:</label>
+    <input type="time" name="hora_fim" min="08:00" max="18:00" required>
+
+    <label>Responsável:</label>
+    <input type="text" name="responsavel" required>
+
+    <button type="submit">Reservar</button>
+</form>
+
+{% endblock %}
