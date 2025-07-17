@@ -25,18 +25,15 @@ def create_app():
     migrate.init_app(app, db) # Inicializa o Flask-Migrate
 
     # Registrar blueprints
-    from app.routes.auth import auth_bp
+    #from app.routes.auth import auth_bp
     from app.routes.coordenador import coordenador_bp
     from app.routes.instrutor import instrutor_bp
-    # É CRUCIAL que app/routes/geral.py seja convertido em um Blueprint!
-    # Por exemplo, crie uma pasta 'app/routes/geral/' com '__init__.py' e 'views.py' dentro.
-    # E em 'app/routes/geral/__init__.py', defina 'geral_bp = Blueprint(...)'.
-    from app.routes.geral import geral_bp # Assumindo que você converteu geral.py para um Blueprint
+    from app.routes.geral import geral_bp
 
     app.register_blueprint(geral_bp)
     app.register_blueprint(coordenador_bp, url_prefix='/coordenador')
     app.register_blueprint(instrutor_bp, url_prefix='/instrutor')
-    app.register_blueprint(auth_bp, url_prefix='/auth')
+    # app.register_blueprint(auth_bp, url_prefix='/auth')
 
     @app.route('/')
     def index():
