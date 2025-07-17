@@ -42,5 +42,35 @@
   </tbody>
 </table>
 
+<div class="modal fade" id="modalNovaSala" tabindex="-1" aria-labelledby="tituloModalNovaSala" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    
+      <div class="modal-header">
+        <h5 class="modal-title" id="tituloModalNovaSala">Adicionar Nova Sala</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
 
+      <div class="modal-body">
+        <form id="formNovaSala">
+          <div class="mb-3">
+            <label for="nomeSala" class="form-label">Nome da Sala</label>
+            <input type="text" class="form-control" id="nomeSala" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="capacidadeSala" class="form-label">Capacidade</label>
+            <input type="number" class="form-control" id="capacidadeSala" min="0" required>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Salvar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
 {% endblock %}
