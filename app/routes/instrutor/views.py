@@ -1,13 +1,14 @@
 from flask import  render_template, request, redirect, url_for, flash
 from app.db import get_db
-from . import instrutor_bp
+from app.routes.instrutor import instrutorr_bp as instrutor
 from datetime import datetime
 from flask import jsonify
 
-@instrutor_bp.route('/')
+@instrutor.route('/')
 def painel_instrutor():
     try:
-        with conectar() as conexao:
+        conn = get_db()
+        with conn.cursor() as cursor:
             with conexao.cursor(dictionary=True) as cursor:
                 cursor.execute("SELECT * FROM sala")
                 salas = cursor.fetchall()
@@ -22,7 +23,7 @@ def painel_instrutor():
         print("Erro ao carregar painel do instrutor:", e)
         return f"Erro: {e}"
     
-@instrutor_bp.route('/reservar', methods=['POST'])
+@instrutor.route('/reservar', methods=['POST'])
 def criar_reserva():
     try:
         sala_id = request.form['sala_id']

@@ -1,0 +1,34 @@
+ChronoSala/
+├── .gitignore
+├── app/
+│   ├── __init__.py
+│   ├── db.py
+│   ├── models/
+│   │   └── ChronoSala.sql
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── auth/
+│   │   │   ├── __init__.py
+│   │   │   └── views.py
+│   │   ├── coordenador/
+│   │   │   ├── __init__.py
+│   │   │   └── views.py
+│   │   ├── geral.py
+│   │   └── instrutor/
+│   │       ├── __init__.py
+│   │       └── views.py
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── style.css
+│   │   └── js/
+│   │       └── script.js
+│   ├── templates/
+│   │   ├── coordenador.html
+│   │   ├── editar_sala.html
+│   │   ├── index.html
+│   │   ├── instrutor.html
+│   │   └── loginTeste.html
+│   └── test/
+├── config.py
+├── gerar_estrutura.py ← Gera estrutura de diretórios (essa aqui)
+└── run.py
