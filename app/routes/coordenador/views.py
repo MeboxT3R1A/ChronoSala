@@ -74,9 +74,10 @@ def cadastro_usuario():
 
         try:
             conn = get_db()
+            print("Conectado ao banco com sucesso")
             with conn.cursor() as cursor:
                 query = """
-                    INSERT INTO funcionarios (email, nome, matricula, senha, funcao)
+                    INSERT INTO funcionario (email, nome, matricula, senha, funcao)
                     VALUES (%s, %s, %s, %s, %s)
                 """
                 cursor.execute(query, (email, nome, matricula, senha, funcao))
@@ -88,5 +89,7 @@ def cadastro_usuario():
             flash('Erro ao cadastrar funcionário.', 'danger')
 
         return redirect(url_for('coordenador_bp.cadastro_usuario'))
+
+
 
     return render_template('cadastro_usuario.html')
