@@ -5,8 +5,9 @@
 {% block content %}
 <h1>Painel do Coordenador</h1>
 <button onclick="abrirModal()">+ Nova Sala</button>
-<a href="{{ url_for('coordenador_bp.cadastro_usuario') }}">
-    <button type="button">Cadastro Usuário</button>
+
+<a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">
+    <button type="button">Painel Funcionários</button>
 </a>
 {% with messages = get_flashed_messages() %}
   {% if messages %}

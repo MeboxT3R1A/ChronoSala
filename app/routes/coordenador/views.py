@@ -74,9 +74,10 @@ def cadastro_usuario():
 
         try:
             conn = get_db()
+            print("Conectado ao banco com sucesso")
             with conn.cursor() as cursor:
                 query = """
-                    INSERT INTO funcionarios (email, nome, matricula, senha, funcao)
+                    INSERT INTO funcionario (email, nome, matricula, senha, funcao)
                     VALUES (%s, %s, %s, %s, %s)
                 """
                 cursor.execute(query, (email, nome, matricula, senha, funcao))
@@ -90,3 +91,21 @@ def cadastro_usuario():
         return redirect(url_for('coordenador_bp.cadastro_usuario'))
 
     return render_template('cadastro_usuario.html')
+
+
+from flask import render_template, current_app
+
+@coordenador.route('/listar_funcionarios')
+def listar_funcionarios():
+    try:
+        conn = get_db()
+        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM funcionario;")
+            funcionarios = cursor.fetchall()
+        return render_template('painel_funcionario.html', funcionarios=funcionarios)
+    except Exception as e:
+        return f"Erro ao buscar funcionários: {e}"
+    
+
+
+
