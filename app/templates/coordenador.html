@@ -27,13 +27,13 @@
   <tbody>
     {% for sala in salas %}
     <tr>
-      <td>{{ sala.nome }}</td>
-      <td>{{ sala.status }}</td>
+      <td>{{ sala.nome_sala }}</td>
+      <td>{{ sala.status_sala.value }}</td>
       <td>
-        <a href="{{ url_for('coordenador_bp.editar_sala', id=sala.id) }}" class="btn-cancelar">Editar</a>
+        <a href="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" class="btn-cancelar">Editar</a>
 
-        <form action="{{ url_for('coordenador_bp.excluir_sala', id=sala.id) }}" method="POST" style="display:inline;" 
-              onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome }}?');">
+        <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" method="POST" style="display:inline;" 
+              onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome_sala }}?');">
           <button type="submit" style="background-color: #e74c3c; color: white;">Excluir</button>
         </form>
       </td>

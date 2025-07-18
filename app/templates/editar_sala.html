@@ -1,29 +1,27 @@
-{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Sala</title>
+</head>
+<body>
+    <h1>Editar Sala</h1>
 
-{% block title %}Editar Sala{% endblock %}
+    <form action="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" method="POST">
+        <label for="nome">Nome da Sala:</label><br>
+        <input type="text" id="nome" name="nome" value="{{ sala.nome_sala }}" readonly><br><br>
 
-{% block content %}
-<h1>Editar Sala</h1>
+        <label for="capacidade">Capacidade:</label><br>
+        <input type="number" id="capacidade" name="capacidade" value="{{ sala.capacidade }}" required><br><br>
 
-<form method="POST" action="{{ url_for('coordenador.editar_sala', id=sala.id) }}">
-  <label>Nome da Sala:</label>
-  <input type="text" name="nome" value="{{ sala.nome }}" required><br><br>
+        <label for="status">Status:</label><br>
+        <select id="status" name="status">
+            <option value="Disponível" {% if sala.status_sala.value == 'Disponível' %}selected{% endif %}>Disponível</option>
+            <option value="Ocupado" {% if sala.status_sala.value == 'Ocupado' %}selected{% endif %}>Ocupado</option>
+            <option value="Em manutenção" {% if sala.status_sala.value == 'Em manutenção' %}selected{% endif %}>Em manutenção</option>
+        </select><br><br>
 
-  <label>Status:</label>
-  <select name="status" required>
-    <option value="disponivel" {% if sala.status == 'disponivel' %}selected{% endif %}>Disponível</option>
-    <option value="ocupada" {% if sala.status == 'ocupada' %}selected{% endif %}>Ocupada</option>
-    <option value="manutencao" {% if sala.status == 'manutencao' %}selected{% endif %}>Em Manutenção</option>
-  </select><br><br>
-
-  <label>Imagem:</label>
-  <select name="imagem" required>
-    {% for img in imagens %}
-      <option value="{{ img }}" {% if sala.imagem == img %}selected{% endif %}>{{ img }}</option>
-    {% endfor %}
-  </select><br><br>
-
-  <button type="submit">Salvar</button>
-  <a href="{{ url_for('routes.painel_coordenador') }}" class="btn-cancelar">Cancelar</a>
-</form>
-{% endblock %}
+        <button type="submit">Salvar Alterações</button>
+    </form>
+</body>
+</html>
