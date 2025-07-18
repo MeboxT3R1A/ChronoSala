@@ -5,7 +5,7 @@
 {% block content %}
 <h1 style="margin-bottom: 20px;">Painel Cadastro Usuario</h1>
 
-<form action="{{ url_for('coordenador.cadastro_usuario') }}" method="POST" style="max-width: 400px;">
+<form action="{{ url_for('coordenador_bp.cadastro_usuario') }}" method="POST" style="max-width: 400px;">
     <label for="email">Email:</label><br>
     <input type="email" id="email" name="email" maxlength="60" required
            style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
