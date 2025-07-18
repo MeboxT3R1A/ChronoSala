@@ -4,14 +4,13 @@ from app.routes.coordenador import coordenador_bp as coordenador
 import pymysql.err
 import pymysql.cursors
 
-
 @coordenador.route('/')
 def painel_coordenador():
     try:
         conn = get_db()
-        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:  # <-- Aqui
+        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
             cursor.execute("SELECT * FROM sala")
-            salas = cursor.fetchall()  # salas será lista de dicts
+            salas = cursor.fetchall()
         return render_template('coordenador.html', salas=salas)
 
     except Exception as e:
@@ -22,8 +21,7 @@ def painel_coordenador():
 def editar_sala(nome_sala):
     try:
         conn = get_db()
-        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:  # <-- Aqui
-
+        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
             if request.method == 'POST':
                 status = request.form['status']
                 cursor.execute(
@@ -35,7 +33,7 @@ def editar_sala(nome_sala):
                 return redirect(url_for('coordenador.painel_coordenador'))
 
             cursor.execute("SELECT * FROM sala WHERE nome_sala=%s", (nome_sala,))
-            sala = cursor.fetchone()  # sala será dict
+            sala = cursor.fetchone()
 
             if not sala:
                 flash('Sala não encontrada.')
@@ -52,17 +50,15 @@ def editar_sala(nome_sala):
 def excluir_sala(nome_sala):
     try:
         conn = get_db()
-        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:  # <-- Aqui
+        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
             cursor.execute("DELETE FROM sala WHERE nome_sala = %s", (nome_sala,))
             conn.commit()
             flash('Sala excluída com sucesso.')
-
     except Exception as e:
         flash(f'Erro ao excluir sala: {e}')
 
-    return redirect(url_for('coordenador.painel_coordenador'))\
+    return redirect(url_for('coordenador.painel_coordenador'))
 
-# ✅ CORREÇÃO AQUI:
 @coordenador.route('/cadastro_usuario', methods=['GET', 'POST'])
 def cadastro_usuario():
     if request.method == 'POST':
@@ -74,26 +70,20 @@ def cadastro_usuario():
 
         try:
             conn = get_db()
-            print("Conectado ao banco com sucesso")
             with conn.cursor() as cursor:
-                query = """
+                cursor.execute("""
                     INSERT INTO funcionario (email, nome, matricula, senha, funcao)
                     VALUES (%s, %s, %s, %s, %s)
-                """
-                cursor.execute(query, (email, nome, matricula, senha, funcao))
+                """, (email, nome, matricula, senha, funcao))
                 conn.commit()
                 flash('Funcionário cadastrado com sucesso!', 'success')
-
         except pymysql.err.Error as err:
             print("Erro ao cadastrar:", err)
             flash('Erro ao cadastrar funcionário.', 'danger')
 
-        return redirect(url_for('coordenador_bp.cadastro_usuario'))
+        return redirect(url_for('coordenador.cadastro_usuario'))
 
     return render_template('cadastro_usuario.html')
-
-
-from flask import render_template, current_app
 
 @coordenador.route('/listar_funcionarios')
 def listar_funcionarios():
@@ -105,7 +95,3 @@ def listar_funcionarios():
         return render_template('painel_funcionario.html', funcionarios=funcionarios)
     except Exception as e:
         return f"Erro ao buscar funcionários: {e}"
-    
-
-
-

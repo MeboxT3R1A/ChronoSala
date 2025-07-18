@@ -9,10 +9,12 @@ def create_app():
     from app.routes.coordenador import coordenador_bp
     from app.routes.instrutor import instrutor_bp
     from app.routes.geral import geral_bp
+    from app.routes.auth import login_bp
 
     app.register_blueprint(geral_bp)
     app.register_blueprint(coordenador_bp, url_prefix='/coordenador')
     app.register_blueprint(instrutor_bp, url_prefix='/instrutor')
+    app.register_blueprint(login_bp, url_prefix='/login')
 
     # Fecha conexão no final da requisição
     app.teardown_appcontext(close_db)
