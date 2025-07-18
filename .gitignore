@@ -3,5 +3,7 @@ __pycache__/
 *.pyc
 .env
 *.db
-teste.txt
 .venv/
+teste.txt
+texto.txt
+.vscode/

@@ -1,5 +1,7 @@
 ChronoSala/
 ├── .gitignore
+├── .vscode/
+│   └── settings.json
 ├── app/
 │   ├── __init__.py
 │   ├── db.py
@@ -23,6 +25,7 @@ ChronoSala/
 │   │   └── js/
 │   │       └── script.js
 │   ├── templates/
+│   │   ├── cadastro_usuario.html
 │   │   ├── coordenador.html
 │   │   ├── editar_sala.html
 │   │   ├── index.html

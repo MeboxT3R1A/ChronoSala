@@ -1,0 +1,37 @@
+{% extends 'index.html' %}
+
+{% block title %}Cadastro Usuario{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 20px;">Painel Cadastro Usuario</h1>
+
+<form action="{{ url_for('coordenador_bp.cadastro_usuario') }}" method="POST" style="max-width: 400px;">
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" maxlength="60" required
+           style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
+
+    <label for="nome">Nome:</label><br>
+    <input type="text" id="nome" name="nome" maxlength="60" required
+           style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
+
+    <label for="matricula">Matrícula (5 caracteres):</label><br>
+    <input type="text" id="matricula" name="matricula" maxlength="5" minlength="5" required
+           style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
+
+    <label for="senha">Senha (máx 11):</label><br>
+    <input type="password" id="senha" name="senha" maxlength="11" required
+           style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
+
+    <label for="funcao">Função:</label><br>
+    <select name="funcao" id="funcao" required
+            style="width: 70%; padding: 6px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ccc;">
+        <option value="">Selecione...</option>
+        <option value="Coordenador">Coordenador</option>
+        <option value="Instrutor">Instrutor</option>
+        <option value="Administrador">Administrador</option>
+    </select><br>
+
+    <input type="submit" value="Cadastrar"
+           style="padding: 10px 20px; border-radius: 8px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+</form>
+{% endblock %}
