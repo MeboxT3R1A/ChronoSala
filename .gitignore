@@ -3,5 +3,7 @@ __pycache__/
 *.pyc
 .env
 *.db
+texto.txt
+.venv/
 db.py
 teste.txt

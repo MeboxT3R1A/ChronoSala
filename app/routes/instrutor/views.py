@@ -1,9 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app.db import conectar
-from datetime import datetime
-from flask import jsonify
+from flask import  render_template, request, redirect, url_for, flash
+from app.db import get_db
+from . import instrutor_bp as instrutor
 
-instrutor = Blueprint('instrutor', __name__)
 
 @instrutor.route('/')
 def painel_instrutor():

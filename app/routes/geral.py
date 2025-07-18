@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app.db import conectar
 
-geral = Blueprint('geral', __name__)
+geral_bp = Blueprint('geral_bp', __name__)
 
-@geral.route('/')
+@geral_bp.route('/')
 def home():
-    return render_template('login.html')
+    return render_template('loginTeste.html')

@@ -1,13 +1,24 @@
-from flask import Flask
-from app.routes.coordenador import coordenador
-from app.routes.instrutor import instrutor
-from app.routes.geral import geral
+from flask import Flask, render_template
+from app.db import close_db  # importa função para fechar
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = '1234567890abcdef'
+    app.config.from_object('config.DevelopmentConfig')
 
-    app.register_blueprint(geral)
-    app.register_blueprint(coordenador, url_prefix='/coordenador')
-    app.register_blueprint(instrutor, url_prefix='/instrutor')
+    # Importa e registra os blueprints
+    from app.routes.coordenador import coordenador_bp
+    from app.routes.instrutor import instrutor_bp
+    from app.routes.geral import geral_bp
+
+    app.register_blueprint(geral_bp)
+    app.register_blueprint(coordenador_bp, url_prefix='/coordenador')
+    app.register_blueprint(instrutor_bp, url_prefix='/instrutor')
+
+    # Fecha conexão no final da requisição
+    app.teardown_appcontext(close_db)
+
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
     return app
