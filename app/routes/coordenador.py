@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.db import conectar
+import mysql.connector
+
 
 coordenador = Blueprint('coordenador', __name__)
 
@@ -64,3 +66,37 @@ def editar_sala(id):
     except Exception as e:
         flash(f'Erro ao editar sala: {e}')
         return redirect(url_for('coordenador.painel_coordenador'))
+    
+    
+@coordenador.route('/cadastro_usuario', methods=['GET', 'POST'])
+def cadastro_usuario():
+    if request.method == 'POST':
+        email = request.form['email']
+        nome = request.form['nome']
+        matricula = request.form['matricula']
+        senha = request.form['senha']
+        funcao = request.form['funcao']
+
+        try:
+            conn = conectar()  # Use sua função personalizada aqui
+            cursor = conn.cursor()
+
+            query = """
+                INSERT INTO funcionarios (email, nome, matricula, senha, funcao)
+                VALUES (%s, %s, %s, %s, %s)
+            """
+            cursor.execute(query, (email, nome, matricula, senha, funcao))
+            conn.commit()
+            flash('Funcionário cadastrado com sucesso!', 'success')
+
+        except mysql.connector.Error as err:
+            print("Erro ao cadastrar:", err)
+            flash('Erro ao cadastrar funcionário.', 'danger')
+
+        finally:
+            cursor.close()
+            conn.close()
+
+        return redirect(url_for('coordenador.cadastro_usuario'))
+
+    return render_template('cadastro_usuario.html')
