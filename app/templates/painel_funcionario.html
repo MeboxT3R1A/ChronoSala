@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+
+{% block title %}Funcionários Cadastrados{% endblock %}
+
+{% block content %}
+<h1>Funcionários Cadastrados</h1>
+<a href="{{ url_for('coordenador_bp.cadastro_usuario') }}">
+    <button type="button">Cadastro Usuário</button>
+</a>
+
+<table border="1" style="border-collapse: collapse; width: 100%; text-align: left;">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nome</th>
+            <th>Matrícula</th>
+            <th>Função</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for funcionario in funcionarios %}
+        <tr>
+            <td>{{ funcionario['email'] }}</td>
+            <td>{{ funcionario['nome'] }}</td>
+            <td>{{ funcionario['matricula'] }}</td>
+            <td>{{ funcionario['funcao'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if not funcionarios %}
+    <p>Nenhum funcionário cadastrado ainda.</p>
+{% endif %}
+{% endblock %}
