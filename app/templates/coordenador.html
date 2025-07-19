@@ -9,6 +9,9 @@
 <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">
     <button type="button">Painel Funcionários</button>
 </a>
+<a href="{{ url_for('coordenador_bp.listar_reservas') }}">
+    <button type="button">Painel Reserva</button>
+</a>
 {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class="flash-messages">

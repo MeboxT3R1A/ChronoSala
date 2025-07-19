@@ -1,0 +1,147 @@
+{% extends 'index.html' %}
+
+{% block title %}Painel de Reservas{% endblock %}
+
+{% block content %}
+<style>
+    .filtros-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .filtros-container form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .filtros-container input,
+    .filtros-container select,
+    .filtros-container button {
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .filtros-container button {
+        background-color: #1e90ff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .filtros-container button:hover {
+        background-color: #0f78d0;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<h1>Painel de Reservas</h1>
+<a href="{{ url_for('coordenador_bp.criar_reserva') }}" class="btn btn-primary"><button>Criar Reserva</button></a>
+
+
+<div class="filtros-container">
+    <!-- Filtro por Sala -->
+    <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
+        <label for="sala">Filtrar por Sala:</label>
+        <select name="sala" id="sala">
+            <option value="">Todas</option>
+            {% for sala in salas %}
+            <option value="{{ sala }}" {% if sala==sala_selecionada %}selected{% endif %}>{{ sala }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <!-- Filtro por Data -->
+    <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
+        <label for="data">Filtrar por Data:</label>
+        <input type="date" name="data" id="data" value="{{ data_selecionada }}">
+        <button type="submit">Filtrar</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Sala</th>
+            <th>Email</th>
+            <th>Início</th>
+            <th>Término</th>
+            <th>Data</th>
+            <th>Status Reserva</th>
+            <th>Status Chave</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reserva in reservas %}
+        <tr>
+            <td>{{ reserva.id_res }}</td>
+            <td>{{ reserva.nome_sala }}</td>
+            <td>{{ reserva.email }}</td>
+            <td>{{ reserva.inicio }}</td>
+            <td>{{ reserva.termino }}</td>
+            <td>{{ reserva.data_res }}</td>
+            <td>{{ reserva.status_res }}</td>
+            <td>{{ reserva.status_chave }}</td>
+
+            <td>
+                {% if reserva.status_res != 'cancelado' and reserva.status_chave == 'pendente' %}
+                <!-- Botão Entregar -->
+                <form method="POST" action="{{ url_for('coordenador_bp.entregar_chave', id_res=reserva.id_res) }}"
+                    style="display:inline;">
+                    <button type="submit" onclick="return confirm('Você tem certeza que quer entregar a chave?');"
+                        class="btn btn-sm btn-success">Entregar</button>
+                </form>
+
+                <!-- Botão Cancelar -->
+                <form method="POST" action="{{ url_for('coordenador_bp.cancelar_reserva', id_res=reserva.id_res) }}"
+                    style="display:inline;">
+                    <button type="submit" onclick="return confirm('Tem certeza que quer cancelar esta reserva?');"
+                        class="btn btn-sm btn-danger">Cancelar</button>
+                </form>
+
+                {% elif reserva.status_chave == 'Chave retirada' %}
+                <!-- Chave entregue -->
+                <span class="badge bg-warning text-dark">Chave entregue</span>
+
+                <!-- Botão Devolver -->
+                <form method="POST" action="{{ url_for('coordenador_bp.devolver_chave', id_res=reserva.id_res) }}"
+                    style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-primary">Devolver</button>
+                </form>
+
+                {% elif reserva.status_chave == 'Chave devolvida' %}
+                <!-- Chave devolvida -->
+                <span class="badge bg-success">Chave devolvida</span>
+                {% endif %}
+
+                {% if reserva.status_res == 'cancelado' %}
+                <span class="badge bg-danger">Reserva Cancelada</span>
+                {% endif %}
+            </td>
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

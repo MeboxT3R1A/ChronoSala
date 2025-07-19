@@ -44,7 +44,7 @@ CREATE TABLE reserva (
     termino TIME NOT NULL,
     data_res DATE NOT NULL,
     status_res ENUM('reservado', 'cancelado') DEFAULT 'reservado',
-    status_chave ENUM('pendente', 'entregue', 'devolvida') DEFAULT 'pendente',
+    status_chave ENUM('pendente', 'Chave retirada', 'Chave devolvida') DEFAULT 'pendente',
     CONSTRAINT chk_horario CHECK (inicio < termino),
     FOREIGN KEY (nome_sala)
         REFERENCES sala (nome_sala)

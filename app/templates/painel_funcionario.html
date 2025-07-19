@@ -15,20 +15,24 @@
             <th>Nome</th>
             <th>Matrícula</th>
             <th>Função</th>
+            <th>Ações</th> <!-- Nova coluna -->
         </tr>
     </thead>
     <tbody>
         {% for funcionario in funcionarios %}
         <tr>
-            <td>{{ funcionario['email'] }}</td>
-            <td>{{ funcionario['nome'] }}</td>
-            <td>{{ funcionario['matricula'] }}</td>
-            <td>{{ funcionario['funcao'] }}</td>
+            <td>{{ funcionario.email }}</td>
+            <td>{{ funcionario.nome }}</td>
+            <td>{{ funcionario.matricula }}</td>
+            <td>{{ funcionario.funcao }}</td>
+            <td>
+                <a href="{{ url_for('coordenador_bp.editar_funcionario', email=funcionario.email) }}"> <button>Editar</button> </a>
+
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
 {% if not funcionarios %}
     <p>Nenhum funcionário cadastrado ainda.</p>
 {% endif %}
