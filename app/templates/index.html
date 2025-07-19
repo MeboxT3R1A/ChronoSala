@@ -9,6 +9,20 @@
 
 <body>
 
+    <!-- Botão do menu hambúrguer (☰) -->
+    <div class="menu-button" onclick="toggleSidebar()">☰</div>
+
+    <!-- Sidebar oculta -->
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">×</a>
+        <a href="{{ url_for('geral_bp.home') }}">Início</a>
+        <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Painel Coordenador</a>
+        <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Painel Instrutor</a>
+        <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Painel Funcionário</a>
+        <a href="{{ url_for('coordenador_bp.listar_reservas') }}">Painel Reserva</a>
+    </div>
+
+    <!-- Cabeçalho padrão que você já usava -->
     <header>
         <nav>
             <a href="{{ url_for('geral_bp.home') }}">Início</a>
@@ -17,10 +31,21 @@
         </nav>
     </header>
 
+    <!-- Conteúdo principal -->
     <main>
         {% block content %}{% endblock %}
     </main>
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const body = document.body;
+
+            sidebar.classList.toggle("active");
+            body.classList.toggle("sidebar-open");
+        }
+    </script>
 </body>
 
 </html>
