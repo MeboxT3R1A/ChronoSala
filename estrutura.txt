@@ -18,12 +18,12 @@ ChronoSala/
 │   │       ├── __init__.py
 │   │       └── views.py
 │   ├── static/
-│   │   ├── CSS/
+│   │   ├── css/
 │   │   │   ├── style.css
 │   │   │   └── styleLogin.css
-│   │   ├── JS/
-│   │   │   └── script.js
-│   │   └── images/
+│   │   └── js/
+│   │       ├── login.js
+│   │       └── script.js
 │   └── templates/
 │       ├── coordenador.html
 │       ├── editar_sala.html

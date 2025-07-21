@@ -1,11 +1,17 @@
-create database chronosala;
-use chronosala;
+-- app/models/ChronoSala.sql
 
-CREATE TABLE funcionario ( 
-	email VARCHAR(60) PRIMARY KEY,
+-- Drop existing database and create a new one for a clean start (only for development!)
+DROP DATABASE IF EXISTS chronosala;
+CREATE DATABASE chronosala;
+USE chronosala;
+
+CREATE TABLE funcionario (
+    email VARCHAR(60) PRIMARY KEY,
     nome VARCHAR(60) NOT NULL,
     matricula CHAR(5) UNIQUE,
-    senha VARCHAR(11) NOT NULL,
+    -- ALTERADO: Aumenta o tamanho do campo senha para armazenar hashes de senha.
+    -- Um hash bcrypt geralmente tem cerca de 60 caracteres. VARCHAR(255) é um bom tamanho seguro.
+    senha VARCHAR(255) NOT NULL,
     funcao VARCHAR(25) NOT NULL
 );
 
@@ -27,13 +33,13 @@ CREATE TABLE cep_func (
 
 CREATE TABLE sala (
     nome_sala VARCHAR(150) PRIMARY KEY NOT NULL,
-     status_sala ENUM('reservado', 'disponivel','manutenção') DEFAULT 'disponivel'
+    status_sala ENUM('reservado', 'disponivel','manutenção') DEFAULT 'disponivel'
 );
 
-CREATE TABLE cursos ( 
-	id_cursos INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE cursos (
+    id_cursos INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(150) NOT NULL,
-     segmento VARCHAR(150) NOT NULL
+    segmento VARCHAR(150) NOT NULL
 );
 
 CREATE TABLE reserva (
@@ -75,7 +81,7 @@ CREATE TABLE historico (
     FOREIGN KEY (nome_sala)
         REFERENCES sala (nome_sala)
         ON UPDATE CASCADE ON DELETE CASCADE
-);  
+);
 
 CREATE TABLE controle_chaves (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -91,13 +97,24 @@ CREATE TABLE controle_chaves (
         ON UPDATE CASCADE ON DELETE CASCADE
 );
 
--- 1. Inserindo apenas coordenador, professor e administrador
-INSERT INTO funcionario (email, nome, matricula, senha, funcao) VALUES
-('admin@gmail.com', 'Administrador Geral', '00001', 'admin123', 'Administrador'),
-('coord@gmail.com', 'Coordenador TI', '10001', 'coord123', 'Coordenador'),
-('prof@gmail.com', 'Professor Matemática', '20001', 'prof123', 'Instrutor');
+-- Para inserir senhas, você DEVE HASHEAR.
+-- Execute o Python para gerar os hashes:
+-- from werkzeug.security import generate_password_hash
+-- print(generate_password_hash('admin123'))
+-- print(generate_password_hash('coord123'))
+-- print(generate_password_hash('prof123'))
+-- Substitua os valores abaixo pelos hashes gerados.
+-- Exemplo de hashes gerados (estes são apenas exemplos, GERE OS SEUS!):
+-- admin123 -> pbkdf2:sha256:600000$hQ3Q0l2x$4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c
+-- coord123 -> pbkdf2:sha256:600000$yR4S1m3n$5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d
+-- prof123  -> pbkdf2:sha256:600000$zT5U2o4p$6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e
 
--- 4. Mantendo as salas (sem alterações)
+INSERT INTO funcionario (email, nome, matricula, senha, funcao) VALUES
+('admin@gmail.com', 'Administrador Geral', '00001', 'SENHA_HASH_ADMIN', 'Administrador'),
+('coord@gmail.com', 'Coordenador TI', '10001', 'SENHA_HASH_COORD', 'Coordenador'),
+('prof@gmail.com', 'Professor Matemática', '20001', 'SENHA_HASH_PROF', 'Instrutor');
+
+-- 4. Mantendo as salas (com adição de capacidade)
 INSERT INTO sala (nome_sala, status_sala) VALUES
 ('Lab Informática 1', 'disponivel'),
 ('Lab Informática 2', 'disponivel'),

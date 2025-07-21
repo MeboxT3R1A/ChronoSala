@@ -7,18 +7,25 @@
 <body>
     <h1>Editar Sala</h1>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flash-messages">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <form action="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" method="POST">
         <label for="nome">Nome da Sala:</label><br>
         <input type="text" id="nome" name="nome" value="{{ sala.nome_sala }}" readonly><br><br>
 
-        <label for="capacidade">Capacidade:</label><br>
-        <input type="number" id="capacidade" name="capacidade" value="{{ sala.capacidade }}" required><br><br>
-
         <label for="status">Status:</label><br>
         <select id="status" name="status">
-            <option value="Disponível" {% if sala.status_sala.value == 'Disponível' %}selected{% endif %}>Disponível</option>
-            <option value="Ocupado" {% if sala.status_sala.value == 'Ocupado' %}selected{% endif %}>Ocupado</option>
-            <option value="Em manutenção" {% if sala.status_sala.value == 'Em manutenção' %}selected{% endif %}>Em manutenção</option>
+            <option value="disponivel" {% if sala.status_sala == 'disponivel' %}selected{% endif %}>Disponível</option>
+            <option value="reservado" {% if sala.status_sala == 'reservado' %}selected{% endif %}>Reservado</option>
+            <option value="manutenção" {% if sala.status_sala == 'manutenção' %}selected{% endif %}>Em Manutenção</option>
         </select><br><br>
 
         <button type="submit">Salvar Alterações</button>

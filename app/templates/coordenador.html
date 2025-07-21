@@ -6,11 +6,11 @@
 <h1>Painel do Coordenador</h1>
 <button onclick="abrirModal()">+ Nova Sala</button>
 
-{% with messages = get_flashed_messages() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <ul class="flash-messages">
-      {% for msg in messages %}
-        <li>{{ msg }}</li>
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
       {% endfor %}
     </ul>
   {% endif %}
@@ -28,11 +28,11 @@
     {% for sala in salas %}
     <tr>
       <td>{{ sala.nome_sala }}</td>
-      <td>{{ sala.status_sala.value }}</td>
+      <td>{{ sala.status_sala or 'N/A' }}</td>
       <td>
         <a href="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" class="btn-cancelar">Editar</a>
 
-        <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" method="POST" style="display:inline;" 
+        <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" method="POST" style="display:inline;"
               onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome_sala }}?');">
           <button type="submit" style="background-color: #e74c3c; color: white;">Excluir</button>
         </form>
@@ -41,6 +41,4 @@
     {% endfor %}
   </tbody>
 </table>
-
-
 {% endblock %}
