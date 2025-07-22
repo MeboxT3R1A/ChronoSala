@@ -1,0 +1,98 @@
+{% extends 'index.html' %}
+
+{% block title %}Editar Funcionário{% endblock %}
+
+{% block content %}
+<style>
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        background-color: #1e90ff;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0f78d0;
+    }
+
+    .cancelar {
+        margin-left: 10px;
+        color: purple;
+        text-decoration: none;
+    }
+
+    .cancelar:hover {
+        text-decoration: underline;
+    }
+
+    .mensagem {
+        color: green;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .senha-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .mostrar-senha {
+        font-size: 14px;
+        cursor: pointer;
+        white-space: nowrap;
+        user-select: none;
+    }
+</style>
+
+<h1>Editar Funcionário</h1>
+
+<form id="form-edicao" method="POST" action="">
+    <label for="email">Email (não pode ser alterado):</label>
+    <input type="email" id="email" name="email" value="{{ funcionario.email }}" readonly>
+
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" value="{{ funcionario.nome }}" required>
+
+    <label for="matricula">Matrícula:</label>
+    <input type="text" id="matricula" name="matricula" value="{{ funcionario.matricula }}" required>
+
+    <label for="senha">Senha:</label>
+    <div class="senha-container">
+        <input type="password" id="senha" name="senha" value="{{ funcionario.senha }}" required>
+        <label class="mostrar-senha" for="mostrar_senha">
+            <input type="checkbox" id="mostrar_senha" onchange="toggleSenha()"> Mostrar senha
+        </label>
+    </div>
+
+    <label for="funcao">Função:</label>
+    <select id="funcao" name="funcao" required>
+        <option value="Coordenador" {% if funcionario.funcao == 'Coordenador' %}selected{% endif %}>Coordenador</option>
+        <option value="Administrador" {% if funcionario.funcao == 'Administrador' %}selected{% endif %}>Administrador</option>
+    </select>
+
+    <button type="submit">Salvar Alterações</button>
+    <a class="cancelar" href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Cancelar</a>
+</form>
+
+<script>
+    // Alterna entre mostrar e esconder a senha
+    function toggleSenha() {
+        const senhaInput = document.getElementById('senha');
+        const mostrarSenhaCheckbox = document.getElementById('mostrar_senha');
+        senhaInput.type = mostrarSenhaCheckbox.checked ? 'text' : 'password';
+    }
+</script>
+
+{% endblock %}
