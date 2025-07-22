@@ -1,10 +1,14 @@
-from flask import render_template, request, jsonify
+# app/routes/instrutor/views.py
+from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from app.db import get_db
 from app.routes.instrutor import instrutor_bp as instrutor
 import pymysql.cursors
 from datetime import datetime
+from app.decorators import login_required, role_required
 
 @instrutor.route('/')
+@login_required
+@role_required(['Instrutor', 'Administrador'])
 def painel_instrutor():
     try:
         conn = get_db()

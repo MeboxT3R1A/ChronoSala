@@ -1,5 +1,5 @@
+#app/routes/auth/__init__.py
+
 from flask import Blueprint
-
 login_bp = Blueprint("login_bp", __name__)
-
 from . import views

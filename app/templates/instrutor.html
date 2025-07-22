@@ -3,6 +3,30 @@
 {% block title %}Área do Instrutor{% endblock %}
 
 {% block content %}
+    <h1>Bem-vindo, Instrutor {% if session.get('user_name') %}{{ session.get('user_name') }}{% endif %}!</h1>
+    <p>Aqui você poderá visualizar as salas disponíveis para reserva.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flash-messages">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if salas_disponiveis %}
+        <h2>Salas Disponíveis:</h2>
+        <ul>
+            {% for sala in salas_disponiveis %}
+                <li>{{ sala.nome_sala }} (Status: {{ sala.status_sala or 'N/A' }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma sala disponível no momento.</p>
+    {% endif %}
+
 <h1>Salas Disponíveis</h1>
 <div class="container">
     {% for sala in salas %}
