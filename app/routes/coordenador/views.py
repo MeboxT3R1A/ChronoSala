@@ -115,14 +115,31 @@ def cadastro_usuario():
 
 @coordenador.route('/listar_funcionarios')
 def listar_funcionarios():
+    busca = request.args.get('busca')
+    filtro_funcao = request.args.get('filtro_funcao')
+
     try:
         conn = get_db()
-        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
-            cursor.execute("SELECT * FROM funcionario;")
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            query = "SELECT * FROM funcionario WHERE 1=1"
+            params = []
+
+            if busca:
+                query += " AND (nome LIKE %s OR matricula = %s)"
+                params.extend((f"%{busca}%", busca))
+
+            if filtro_funcao:
+                query += " AND funcao = %s"
+                params.append(filtro_funcao)
+
+            cursor.execute(query, params)
             funcionarios = cursor.fetchall()
         return render_template('painel_funcionario.html', funcionarios=funcionarios)
+
     except Exception as e:
-        return f"Erro ao buscar funcionários: {e}"
+        flash(f"Erro ao buscar funcionários: {e}", "danger")
+        return render_template('painel_funcionario.html', funcionarios=[])
+
     
 @coordenador.route('/editar_funcionario/<email>', methods=['GET', 'POST'])
 def editar_funcionario(email):
@@ -161,25 +178,43 @@ def editar_funcionario(email):
         return render_template('editar_funcionario.html', funcionario=funcionario)
 
 
-@coordenador.route('/listar_reservas', methods=['GET', 'POST'])
+def buscar_salas():
+    conn = get_db()
+    with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+        cursor.execute("SELECT nome_sala FROM sala")
+        return [row['nome_sala'] for row in cursor.fetchall()]
+
+
+@coordenador.route('/listar_reservas', methods=['GET'])
 def listar_reservas():
     try:
         conn = get_db()
         with conn.cursor(pymysql.cursors.DictCursor) as cursor:
-            # Filtros opcionais
-            nome_sala = request.form.get('nome_sala')
-            data_res = request.form.get('data_res')
+            nome_sala = request.args.get('sala')
+            data_res = request.args.get('data')
+            busca = request.args.get('busca')
 
             query = "SELECT id_res, nome_sala, email, inicio, termino, data_res, status_res, status_chave FROM reserva"
             filtros = []
             valores = []
 
+            # Filtros existentes
             if nome_sala:
                 filtros.append("nome_sala = %s")
                 valores.append(nome_sala)
             if data_res:
                 filtros.append("data_res = %s")
                 valores.append(data_res)
+
+            # Filtro novo para busca geral
+            if busca:
+                # Verifica se busca é número (id)
+                if busca.isdigit():
+                    filtros.append("(id_res = %s OR nome_sala LIKE %s OR email LIKE %s)")
+                    valores.extend([int(busca), f"%{busca}%", f"%{busca}%"])
+                else:
+                    filtros.append("(nome_sala LIKE %s OR email LIKE %s)")
+                    valores.extend([f"%{busca}%", f"%{busca}%"])
 
             if filtros:
                 query += " WHERE " + " AND ".join(filtros)
@@ -189,11 +224,16 @@ def listar_reservas():
             cursor.execute(query, valores)
             reservas = cursor.fetchall()
 
-        return render_template('painel_reserva.html', reservas=reservas)
+        return render_template(
+            'painel_reserva.html',
+            reservas=reservas,
+            salas=buscar_salas(),
+            sala_selecionada=nome_sala,
+            data_selecionada=data_res
+        )
     except Exception as e:
         flash(f'Erro ao listar reservas: {e}', 'danger')
         return redirect(url_for('coordenador_bp.painel_coordenador'))
-
 
 # Rota para entregar a chave (acionada pelo botão "Entregar")
 @coordenador.route('/entregar_chave/<int:id_res>', methods=['POST'])
