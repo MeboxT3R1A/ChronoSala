@@ -1,7 +1,10 @@
+<!-- app/templates/coordenador.html -->
 {% extends 'index.html' %}
 
 {% block title %}Painel do Coordenador{% endblock %}
-
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/coord.css') }}">
+{% endblock %}
 {% block content %}
 <h1>Painel do Coordenador</h1>
 <button onclick="abrirModal()">+ Nova Sala</button>

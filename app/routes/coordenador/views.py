@@ -88,6 +88,8 @@ def editar_sala(nome_sala):
 
 
 @coordenador.route('/cadastro_usuario', methods=['GET', 'POST'])
+@login_required
+@role_required(['Coordenador'])
 def cadastro_usuario():
     if request.method == 'POST':
         email = request.form['email']
@@ -114,6 +116,8 @@ def cadastro_usuario():
     return render_template('cadastro_usuario.html')
 
 @coordenador.route('/listar_funcionarios')
+@login_required
+@role_required(['Coordenador'])
 def listar_funcionarios():
     try:
         conn = get_db()
@@ -125,6 +129,8 @@ def listar_funcionarios():
         return f"Erro ao buscar funcionários: {e}"
     
 @coordenador.route('/editar_funcionario/<email>', methods=['GET', 'POST'])
+@login_required
+@role_required(['Coordenador'])
 def editar_funcionario(email):
     conn = get_db()
     if request.method == 'POST':
@@ -162,6 +168,8 @@ def editar_funcionario(email):
 
 
 @coordenador.route('/listar_reservas', methods=['GET', 'POST'])
+@login_required
+@role_required(['Coordenador'])
 def listar_reservas():
     try:
         conn = get_db()
@@ -197,6 +205,8 @@ def listar_reservas():
 
 # Rota para entregar a chave (acionada pelo botão "Entregar")
 @coordenador.route('/entregar_chave/<int:id_res>', methods=['POST'])
+@login_required
+@role_required(['Coordenador'])
 def entregar_chave(id_res):
     conn = get_db()
     with conn.cursor() as cursor:
@@ -207,6 +217,8 @@ def entregar_chave(id_res):
 
 # Rota para devolver a chave
 @coordenador.route('/devolver_chave/<int:id_res>', methods=['POST'])
+@login_required
+@role_required(['Coordenador'])
 def devolver_chave(id_res):
     conn = get_db()
     with conn.cursor() as cursor:
@@ -217,6 +229,8 @@ def devolver_chave(id_res):
 
 
 @coordenador.route('/reservas/criar', methods=['GET', 'POST'])
+@login_required
+@role_required(['Coordenador'])
 def criar_reserva():
     try:
         conn = get_db()
@@ -252,6 +266,8 @@ def criar_reserva():
 
 
 @coordenador.route('/cancelar_reserva/<int:id_res>', methods=['POST'])
+@login_required
+@role_required(['Coordenador'])
 def cancelar_reserva(id_res):
     try:
         conn = get_db()

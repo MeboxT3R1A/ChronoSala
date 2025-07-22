@@ -27,6 +27,8 @@ def painel_instrutor():
         return f"Erro: {e}"
 
 @instrutor.route('/reservar', methods=['POST'])
+@login_required
+@role_required(['Instrutor', 'Administrador'])
 def criar_reserva():
     try:
         nome_sala = request.form['nome_sala']
