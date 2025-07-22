@@ -20,12 +20,12 @@ def painel_coordenador():
         with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
             cursor.execute("SELECT * FROM sala")
             salas = cursor.fetchall()
-        return render_template('coordenador.html', salas=salas)
+        return render_template('coordenador/coordenador.html', salas=salas)
 
     except Exception as e:
         print('ERRO AO ACESSAR SALAS:', e)
         flash(f'Erro ao acessar salas: {e}', 'error')
-        return render_template('erro_generico.html', erro=str(e))
+        return render_template('erro/erro_generico.html', erro=str(e))
 
 
 @coordenador.route('/excluir/<nome_sala>', methods=['POST'])
@@ -80,7 +80,7 @@ def editar_sala(nome_sala):
                 return redirect(url_for('coordenador_bp.painel_coordenador'))
 
         imagens = ['img1.png', 'img2.png', 'img3.png']
-        return render_template('editar_sala.html', sala=sala, imagens=imagens)
+        return render_template('coordenador/editar_sala.html', sala=sala, imagens=imagens)
 
     except Exception as e:
         flash(f'Erro ao editar sala: {e}', 'error')
@@ -111,7 +111,7 @@ def cadastro_usuario():
 
         return redirect(url_for('coordenador.cadastro_usuario'))
 
-    return render_template('cadastro_usuario.html')
+    return render_template('coordenador/cadastro_usuario.html')
 
 @coordenador.route('/listar_funcionarios')
 def listar_funcionarios():
@@ -120,7 +120,7 @@ def listar_funcionarios():
         with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
             cursor.execute("SELECT * FROM funcionario;")
             funcionarios = cursor.fetchall()
-        return render_template('painel_funcionario.html', funcionarios=funcionarios)
+        return render_template('coordenador/painel_funcionario.html', funcionarios=funcionarios)
     except Exception as e:
         return f"Erro ao buscar funcionários: {e}"
     
@@ -158,7 +158,7 @@ def editar_funcionario(email):
                 flash('Funcionário não encontrado.', 'warning')
                 return redirect(url_for('coordenador_bp.listar_funcionarios'))
 
-        return render_template('editar_funcionario.html', funcionario=funcionario)
+        return render_template('coordenador/editar_funcionario.html', funcionario=funcionario)
 
 
 @coordenador.route('/listar_reservas', methods=['GET', 'POST'])
@@ -189,7 +189,7 @@ def listar_reservas():
             cursor.execute(query, valores)
             reservas = cursor.fetchall()
 
-        return render_template('painel_reserva.html', reservas=reservas)
+        return render_template('coordenador/painel_reserva.html', reservas=reservas)
     except Exception as e:
         flash(f'Erro ao listar reservas: {e}', 'danger')
         return redirect(url_for('coordenador_bp.painel_coordenador'))
@@ -248,7 +248,7 @@ def criar_reserva():
         flash(f"Erro ao criar reserva: {e}", "danger")
         salas = []
 
-    return render_template('criar_reserva.html', salas=salas)
+    return render_template('coordenador/criar_reserva.html', salas=salas)
 
 
 @coordenador.route('/cancelar_reserva/<int:id_res>', methods=['POST'])

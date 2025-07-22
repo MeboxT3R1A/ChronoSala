@@ -28,16 +28,21 @@ ChronoSala/
 │   ├── templates/
 │   │   ├── cadastro_usuario.html
 │   │   ├── coordenador.html
+│   │   ├── criar_reserva.html
+│   │   ├── editar_funcionario.html
 │   │   ├── editar_sala.html
+│   │   ├── erro_generico.html
 │   │   ├── index.html
 │   │   ├── instrutor.html
 │   │   ├── login.html
 │   │   ├── loginTeste.html
-│   │   └── painel_funcionario.html
+│   │   ├── painel_funcionario.html
+│   │   └── painel_reserva.html
 │   └── test/
 ├── config.py
 ├── estrutura.txt
 ├── gerar_estrutura.py ← Gera estrutura de diretórios (essa aqui)
 ├── hasheador_senha.py
 ├── requirements.txt
-└── run.py
+├── run.py
+└── texto.txt
