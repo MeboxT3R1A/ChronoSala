@@ -8,7 +8,7 @@ from app.decorators import login_required, role_required
 
 @coordenador.route('/')
 @login_required
-@role_required(['Coordenador', 'Administrador'])
+@role_required(['Coordenador'] )
 def painel_coordenador():
     """
     Rota para o painel do coordenador.
@@ -22,13 +22,14 @@ def painel_coordenador():
         return render_template('coordenador.html', salas=salas)
 
     except Exception as e:
+        print('ERRO AO ACESSAR SALAS:', e)
         flash(f'Erro ao acessar salas: {e}', 'error')
-        return redirect(url_for('geral_bp.home'))
+        return render_template('erro_generico.html', erro=str(e))
 
 
 @coordenador.route('/excluir/<nome_sala>', methods=['POST'])
 @login_required
-@role_required(['Coordenador', 'Administrador'])
+@role_required(['Coordenador'])
 def excluir_sala(nome_sala):
     """
     Rota para excluir uma sala.
@@ -48,7 +49,7 @@ def excluir_sala(nome_sala):
 
 @coordenador.route('/editar/<nome_sala>', methods=['GET', 'POST'])
 @login_required
-@role_required(['Coordenador', 'Administrador'])
+@role_required(['Coordenador'])
 def editar_sala(nome_sala):
     """
     Rota para editar o status de uma sala.
@@ -83,19 +84,7 @@ def editar_sala(nome_sala):
     except Exception as e:
         flash(f'Erro ao editar sala: {e}', 'error')
         return redirect(url_for('coordenador_bp.painel_coordenador'))
-    
-@coordenador.route('/excluir/<nome_sala>', methods=['POST'])
-def excluir_sala(nome_sala):
-    try:
-        conn = get_db()
-        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
-            cursor.execute("DELETE FROM sala WHERE nome_sala = %s", (nome_sala,))
-            conn.commit()
-            flash('Sala excluída com sucesso.')
-    except Exception as e:
-        flash(f'Erro ao excluir sala: {e}')
 
-    return redirect(url_for('coordenador.painel_coordenador'))
 
 @coordenador.route('/cadastro_usuario', methods=['GET', 'POST'])
 def cadastro_usuario():
@@ -108,7 +97,7 @@ def cadastro_usuario():
 
         try:
             conn = get_db()
-            with conn.cursor() as cursor:
+            with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
                 cursor.execute("""
                     INSERT INTO funcionario (email, nome, matricula, senha, funcao)
                     VALUES (%s, %s, %s, %s, %s)

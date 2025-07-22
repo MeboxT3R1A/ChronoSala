@@ -9,7 +9,6 @@
 <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">
     <button type="button">Painel Funcionários</button>
 </a>
-{% with messages = get_flashed_messages() %}
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <ul class="flash-messages">

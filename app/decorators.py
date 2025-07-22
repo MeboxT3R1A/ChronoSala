@@ -30,9 +30,16 @@ def role_required(allowed_roles):
                 return redirect(url_for('login_bp.login'))
             
             # Verifica se a função do usuário está na lista de funções permitidas.
+            print('DEBUG - allowed_roles:', allowed_roles)
+            print('DEBUG - user_role:', session.get('user_role'))
+            print('DEBUG - repr(user_role):', repr(session.get('user_role')))
+
             if session.get('user_role') not in allowed_roles:
+                print(f"ACESSO NEGADO: {session.get('user_role')} não está em {allowed_roles}")
                 flash('Você não tem permissão para acessar esta página.', 'danger')
-                return redirect(url_for('geral_bp.home')) # Redireciona para uma página genérica ou de erro
+
+                # Redireciona para uma página que *não* faz outro redirect automático
+                return redirect(url_for('login_bp.login'))  # TEMPORÁRIO para quebrar o loop # Redireciona para uma página genérica ou de erro
             return f(*args, **kwargs)
         return decorated_function
     return decorator

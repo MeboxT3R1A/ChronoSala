@@ -106,13 +106,13 @@ CREATE TABLE controle_chaves (
 -- Substitua os valores abaixo pelos hashes gerados.
 -- Exemplo de hashes gerados (estes são apenas exemplos, GERE OS SEUS!):
 -- admin123 -> pbkdf2:sha256:600000$hQ3Q0l2x$4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c
--- coord123 -> pbkdf2:sha256:600000$yR4S1m3n$5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d
+-- coord132 -> pbkdf2:sha256:600000$yR4S1m3n$5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d
 -- prof123  -> pbkdf2:sha256:600000$zT5U2o4p$6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e
 
 INSERT INTO funcionario (email, nome, matricula, senha, funcao) VALUES
-('admin@gmail.com', 'Administrador Geral', '00001', 'SENHA_HASH_ADMIN', 'Administrador'),
-('coord@gmail.com', 'Coordenador TI', '10001', 'SENHA_HASH_COORD', 'Coordenador'),
-('prof@gmail.com', 'Professor Matemática', '20001', 'SENHA_HASH_PROF', 'Instrutor');
+('admin@gmail.com', 'Administrador Geral', '00001', 'scrypt:32768:8:1$E6ESwQWJH23UMolH$d3d25371f04af4dee3e743c62dc261864f462c7940591267b08b631c6ab156c6cd5f00ab7ea56591512ca8c132b007e77fa0672fad428fc7518219d60ea24176', 'Administrador'),
+('coord@gmail.com', 'Coordenador TI', '10001', 'scrypt:32768:8:1$WXfS5bvu12Uk70Ge$d55b49d3ee638b3fa0933838b4c990e168eacf6017e0286cf93c2e49a97a7506d057a6944a00e509850a13757e56833432a3b500f8e41cee23dfd87660b97d68', 'Coordenador'),
+('prof@gmail.com', 'Professor Matemática', '20001', 'scrypt:32768:8:1$ezZOEcidURQOFjhS$9dbca837c2ad7e98dd395ec0091017c1c038f7d125ca08c25d6f9fc18eb4d5f8363dd4fa6add783546143065e76cab415a18ef97fbc42801ecd8d29f5306892a', 'Instrutor');
 
 -- 4. Mantendo as salas (com adição de capacidade)
 INSERT INTO sala (nome_sala, status_sala) VALUES
