@@ -194,3 +194,69 @@ button, .button {
     color: var(--cor-aviso);
     border-color: #ffeeba;
 }
+
+
+
+/* static/css/layout.css */
+
+/* Sidebar styles - Versão corrigida */
+#sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--azul-senac);
+    transition: var(--transicao-padrao);
+    z-index: 1000;
+    transform: translateX(-100%);
+    overflow-y: auto;
+}
+
+#sidebar.active {
+    transform: translateX(0);
+}
+
+#sidebar a {
+    color: white !important; /* Força cor branca */
+    padding: 12px 16px;
+    text-decoration: none;
+    font-size: var(--fonte-tamanho-medio);
+    display: block;
+    transition: var(--transicao-padrao);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white !important;
+}
+
+#sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 2rem;
+    margin-left: 50px;
+    color: white;
+    cursor: pointer;
+}
+.sidebar-toggle {
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 10px;
+    color: var(--azul-senac); /* Adicione esta linha */
+    display: inline-block;
+}
+
+.hide-toggle .sidebar-toggle {
+    display: none;
+}
+
+
+/* Ajuste para o conteúdo principal */
+body.sidebar-open main {
+    margin-left: 250px;
+    transition: var(--transicao-padrao);
+}
+

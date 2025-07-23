@@ -44,13 +44,65 @@ window.onclick = function(event) {
     }
 }
 
-function toggleSidebar() {
-    const sidebar = document.getElementById("sidebar");
-    const body = document.body;
+// static/js/script.js
 
+// Substitua a função atual por esta versão mais robusta
+function toggleSidebar() {
+    console.log("Botão clicado"); // Para debug
+    const sidebar = document.getElementById("sidebar");
+    if (!sidebar) {
+        console.error("Elemento sidebar não encontrado");
+        return;
+    }
+    
+    const body = document.body;
     sidebar.classList.toggle("active");
     body.classList.toggle("sidebar-open");
+    
+    // Adicione um overlay quando o sidebar estiver aberto
+    if (sidebar.classList.contains("active")) {
+        createOverlay();
+    } else {
+        removeOverlay();
+    }
 }
+
+function createOverlay() {
+    let overlay = document.getElementById("sidebar-overlay");
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "sidebar-overlay";
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100vw";
+        overlay.style.height = "100vh";
+        overlay.style.zIndex = "999";
+        overlay.onclick = function() {
+            toggleSidebar();
+        };
+        document.body.appendChild(overlay);
+    }
+}
+
+function removeOverlay() {
+    const overlay = document.getElementById("sidebar-overlay");
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+// Fechar o sidebar quando clicar fora (opcional)
+document.addEventListener('click', function(event) {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.querySelector('.sidebar-toggle');
+    
+    if (!sidebar.contains(event.target) && event.target !== toggleBtn) {
+        sidebar.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
+        toggleBtn.classList.add('closed');
+    }
+});
 
 document.getElementById('formReserva').addEventListener('submit', function(e) {
     e.preventDefault();
