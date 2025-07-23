@@ -18,6 +18,9 @@ def get_db():
     return g.db
 
 def close_db(e=None):
-    db = g.pop('db', None)
+    db = getattr(g, '_database', None)
     if db is not None:
-        db.close()
+        try:
+            db.close()
+        except pymysql.err.Error:
+            pass  # ignora erro de "already closed"

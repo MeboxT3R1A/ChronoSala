@@ -32,7 +32,8 @@ CREATE TABLE cep_func (
 );
 
 CREATE TABLE sala (
-    nome_sala VARCHAR(150) PRIMARY KEY NOT NULL,
+	id_sala INT AUTO_INCREMENT PRIMARY KEY,
+    nome_sala VARCHAR(150) NOT NULL,
     status_sala ENUM('reservado', 'disponivel','manutenção') DEFAULT 'disponivel'
 );
 
@@ -44,7 +45,7 @@ CREATE TABLE cursos (
 
 CREATE TABLE reserva (
     id_res INT PRIMARY KEY AUTO_INCREMENT,
-    nome_sala VARCHAR(150),
+	id_sala INT,
     email VARCHAR(60),
     inicio TIME NOT NULL,
     termino TIME NOT NULL,
@@ -52,8 +53,8 @@ CREATE TABLE reserva (
     status_res ENUM('reservado', 'cancelado') DEFAULT 'reservado',
     status_chave ENUM('pendente', 'Chave retirada', 'Chave devolvida') DEFAULT 'pendente',
     CONSTRAINT chk_horario CHECK (inicio < termino),
-    FOREIGN KEY (nome_sala)
-        REFERENCES sala (nome_sala)
+    FOREIGN KEY (id_sala)
+        REFERENCES sala (id_sala)
         ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (email)
         REFERENCES funcionario (email)
@@ -66,7 +67,7 @@ CREATE TABLE historico (
     nome VARCHAR(40),
     email VARCHAR(60),
     id_res INT,
-    nome_sala VARCHAR(150),
+    id_sala INT,
     id_cursos INT,
     FOREIGN KEY (id_cursos)
         REFERENCES cursos (id_cursos),
@@ -78,8 +79,8 @@ CREATE TABLE historico (
     FOREIGN KEY (id_res)
         REFERENCES reserva (id_res)
         ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (nome_sala)
-        REFERENCES sala (nome_sala)
+    FOREIGN KEY (id_sala)
+        REFERENCES sala (id_sala)
         ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -132,16 +133,16 @@ INSERT INTO cursos (nome, segmento) VALUES
 ('Oficina de Teatro', 'Artes');
 
 -- 6. Inserindo 3 reservas (sem estados)
-INSERT INTO reserva (nome_sala, email, inicio, termino, data_res) VALUES
-('Lab Informática 1', 'prof@gmail.com', '08:00:00', '10:00:00', '2023-11-15'),
-('Auditório Principal', 'coord@gmail.com', '14:00:00', '16:00:00', '2023-11-16'),
-('Sala Multiuso', 'prof@gmail.com', '10:00:00', '12:00:00', '2023-11-17');
+INSERT INTO reserva (id_sala, email, inicio, termino, data_res) VALUES
+('1', 'prof@gmail.com', '08:00:00', '10:00:00', '2023-11-15'),
+('2', 'coord@gmail.com', '14:00:00', '16:00:00', '2023-11-16'),
+('3', 'prof@gmail.com', '10:00:00', '12:00:00', '2023-11-17');
 
 -- 7. Inserindo histórico (mantido como "okk")
-INSERT INTO historico (data_historico, email, id_res, nome_sala, id_cursos) VALUES
-('2023-11-10 08:05:23', 'prof@gmail.com', 1, 'Lab Informática 1', 1),
-('2023-11-11 14:30:10', 'coord@gmail.com', 2, 'Auditório Principal', 3),
-('2023-11-12 10:15:45', 'prof@gmail.com', 3, 'Sala Multiuso', 5);
+INSERT INTO historico (data_historico, email, id_res, id_sala, id_cursos) VALUES
+('2023-11-10 08:05:23', 'prof@gmail.com', 1, '1', 1),
+('2023-11-11 14:30:10', 'coord@gmail.com', 2, '2', 3),
+('2023-11-12 10:15:45', 'prof@gmail.com', 3, '3', 5);
 
 -- 8. Inserindo controle de chaves (mantido como "tudo bem")
 INSERT INTO controle_chaves (id_reserva, email_professor, data_entrega, data_devolucao) VALUES

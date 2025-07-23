@@ -1,0 +1,27 @@
+{% extends 'base/index.html' %}
+
+{% block title %}Nova Reserva{% endblock %}
+
+{% block content %}
+<!-- templates/instrutor/reserva_form.html -->
+<h2>Nova Reserva para a Sala: {{ nome_sala }}</h2>
+
+<form method="post">
+    <input type="hidden" name="nome_sala" value="{{ nome_sala }}">
+
+    <label>Data da Reserva:</label>
+    <input type="date" name="data_res" required>
+
+    <label>Hora de Início:</label>
+    <input type="time" name="hora_inicio" required>
+
+    <label>Hora de Término:</label>
+    <input type="time" name="hora_fim" required>
+
+    <label>Responsável:</label>
+    <input type="text" name="responsavel" required>
+
+    <button type="submit">Confirmar Reserva</button>
+</form>
+
+{% endblock %}
