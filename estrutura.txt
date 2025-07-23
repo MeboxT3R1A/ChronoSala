@@ -25,24 +25,27 @@ ChronoSala/
 │   │   └── js/
 │   │       ├── login.js
 │   │       └── script.js
-│   ├── templates/
-│   │   ├── cadastro_usuario.html
-│   │   ├── coordenador.html
-│   │   ├── criar_reserva.html
-│   │   ├── editar_funcionario.html
-│   │   ├── editar_sala.html
-│   │   ├── erro_generico.html
-│   │   ├── index.html
-│   │   ├── instrutor.html
-│   │   ├── login.html
-│   │   ├── loginTeste.html
-│   │   ├── painel_funcionario.html
-│   │   └── painel_reserva.html
-│   └── test/
+│   └── templates/
+│       ├── auth/
+│       │   ├── login.html
+│       │   └── loginTeste.html
+│       ├── base/
+│       │   └── index.html
+│       ├── coordenador/
+│       │   ├── cadastro_usuario.html
+│       │   ├── coordenador.html
+│       │   ├── criar_reserva.html
+│       │   ├── editar_funcionario.html
+│       │   ├── editar_sala.html
+│       │   ├── painel_funcionario.html
+│       │   └── painel_reserva.html
+│       ├── erro/
+│       │   └── erro_generico.html
+│       └── instrutor/
+│           └── instrutor.html
 ├── config.py
 ├── estrutura.txt
 ├── gerar_estrutura.py ← Gera estrutura de diretórios (essa aqui)
 ├── hasheador_senha.py
 ├── requirements.txt
-├── run.py
-└── texto.txt
+└── run.py
