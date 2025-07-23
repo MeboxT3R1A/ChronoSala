@@ -1,0 +1,64 @@
+{% extends 'base/index.html' %}
+
+{% block content %}
+<h2>Minhas Reservas</h2>
+
+{% if reservas %}
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+  <thead style="background-color: #eee;">
+    <tr>
+      <th>Sala</th>
+      <th>Data</th>
+      <th>Início</th>
+      <th>Fim</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reserva in reservas %}
+    <tr>
+      <td>{{ reserva.nome_sala }}</td>
+      <td>{{ reserva.data_res.strftime('%d/%m/%Y') if reserva.data_res else '' }}</td>
+      <td>{{ reserva.inicio.strftime('%H:%M') if reserva.inicio else '' }}</td>
+      <td>{{ reserva.termino.strftime('%H:%M') if reserva.termino else '' }}</td>
+      <td>{{ reserva.status_res }}</td>
+      <td style="text-align: center;">
+  {% if reserva.status_res|lower|trim == 'reservado' %}
+    <a href="{{ url_for('instrutor_bp.cancelar_reserva', id_res=reserva.id_res) }}" 
+       style="
+          display: inline-block;
+          padding: 5px 10px;
+          background-color: #d9534f;
+          color: white;
+          text-decoration: none;
+          border-radius: 4px;
+          font-weight: bold;
+       ">
+      Cancelar
+    </a>
+  {% else %}
+    -
+  {% endif %}
+</td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Você não possui reservas.</p>
+{% endif %}
+
+<br>
+
+<a href="{{ url_for('instrutor_bp.painel_instrutor') }}" style="
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #ccc;
+    color: #000;
+    text-decoration: none;
+    border-radius: 5px;
+">Voltar</a>
+
+{% endblock %}

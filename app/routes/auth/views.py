@@ -4,6 +4,7 @@ from app.db import get_db
 from . import login_bp
 from werkzeug.security import check_password_hash
 import pymysql.cursors
+from flask import session
 
 @login_bp.route('/', methods=['GET', 'POST'])
 def login():
@@ -26,6 +27,7 @@ def login():
                 session['logged_in'] = True
                 session['user_role'] = funcionario['funcao']
                 session['user_name'] = funcionario['nome']
+                session['email'] = funcionario['email']
                 print('== ROLE SALVA NA SESSÃO:', session['user_role'])
                 
                 destinos = {
