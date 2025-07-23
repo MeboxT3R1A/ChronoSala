@@ -1,0 +1,41 @@
+{# templates/auth/login.html #}
+{% extends 'base/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styleLogin.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="login-container">
+    <h2>Bem-Vindo!</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flash-messages">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('login_bp.login') }}">
+      <label for="usuario">Usuário:</label>
+      <input type="text" placeholder="Email ou matrícula" name="usuario" id="usuario"
+        value="{{ usuario_preenchido or '' }}" required>
+
+      <label for="senha">Senha:</label>
+      <input type="password" placeholder="Senha" name="senha" id="senha" required>
+
+      <div class="error" id="error"></div>
+
+      <button type="submit" class="button-entrar">Entrar</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

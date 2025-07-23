@@ -21,28 +21,32 @@ ChronoSala/
 │   ├── static/
 │   │   ├── css/
 │   │   │   ├── style.css
-│   │   │   └── styleLogin.css
+│   │   │   ├── styleLogin.css
+│   │   │   └── style_erro.css
 │   │   └── js/
 │   │       ├── login.js
+│   │       ├── reserva.js
 │   │       └── script.js
-│   └── templates/
-│       ├── auth/
-│       │   ├── login.html
-│       │   └── loginTeste.html
-│       ├── base/
-│       │   └── index.html
-│       ├── coordenador/
-│       │   ├── cadastro_usuario.html
-│       │   ├── coordenador.html
-│       │   ├── criar_reserva.html
-│       │   ├── editar_funcionario.html
-│       │   ├── editar_sala.html
-│       │   ├── painel_funcionario.html
-│       │   └── painel_reserva.html
-│       ├── erro/
-│       │   └── erro_generico.html
-│       └── instrutor/
-│           └── instrutor.html
+│   ├── templates/
+│   │   ├── auth/
+│   │   │   ├── login.html
+│   │   │   └── loginTeste.html
+│   │   ├── base/
+│   │   │   └── base.html
+│   │   ├── coordenador/
+│   │   │   ├── cadastro_usuario.html
+│   │   │   ├── coordenador.html
+│   │   │   ├── criar_reserva.html
+│   │   │   ├── editar_funcionario.html
+│   │   │   ├── editar_sala.html
+│   │   │   ├── painel_funcionario.html
+│   │   │   └── painel_reserva.html
+│   │   ├── erro/
+│   │   │   └── erro_generico.html
+│   │   └── instrutor/
+│   │       └── painel_instrutor.html
+│   └── test/
+│       └── teste.py
 ├── config.py
 ├── estrutura.txt
 ├── gerar_estrutura.py ← Gera estrutura de diretórios (essa aqui)

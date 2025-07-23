@@ -13,7 +13,7 @@ def home():
         elif role == 'Instrutor' or role == 'Administrador':
             return redirect(url_for('instrutor_bp.painel_instrutor'))
 
-    return render_template('auth/loginTeste.html')
+    return render_template('auth/login_form.html')
 
 @geral_bp.route('/logout')
 def logout():
