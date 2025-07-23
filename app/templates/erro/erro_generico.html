@@ -1,39 +1,13 @@
-<!-- templates/erro_generico.html -->
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8" />
-    <title>Erro</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f8d7da;
-            color: #721c24;
-            margin: 2em;
-        }
-        .container {
-            border: 1px solid #f5c6cb;
-            background: #f8d7da;
-            padding: 1.5em;
-            border-radius: 5px;
-            max-width: 600px;
-            margin: auto;
-        }
-        h1 {
-            margin-top: 0;
-        }
-        a {
-            color: #721c24;
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Erro inesperado</h1>
-        <p>Ocorreu um erro durante o processamento da sua requisição:</p>
-        <pre>{{ erro }}</pre>
-        <p><a href="{{ url_for('geral_bp.home') }}">Voltar para a página inicial</a></p>
-    </div>
-</body>
-</html>
+{# templates/erro/erro_generico.html #}
+{% extends 'base/base.html' %}
+
+{% block title %}Erro inesperado{% endblock %}
+
+{% block content %}
+<div class="erro-container">
+    <h1>Erro inesperado</h1>
+    <p>Ocorreu um erro durante o processamento da sua requisição:</p>
+    <pre>{{ erro }}</pre>
+    <p><a href="{{ url_for('geral_bp.home') }}">Voltar para a página inicial</a></p>
+</div>
+{% endblock %}

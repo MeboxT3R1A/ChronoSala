@@ -20,7 +20,7 @@ def painel_instrutor():
                 cursor.execute("SELECT * FROM reserva WHERE nome_sala = %s", (sala['nome_sala'],))
                 sala['reservas'] = cursor.fetchall()
 
-        return render_template('instrutor/instrutor.html', salas=salas)
+        return render_template('instrutor/painel_instrutor.html', salas=salas)
 
     except Exception as e:
         print("Erro ao carregar painel do instrutor:", e)
