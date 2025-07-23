@@ -48,4 +48,4 @@ def login():
             flash(f'Erro interno: {e}', 'error')
             return render_template('auth/login.html', usuario_preenchido=usuario_preenchido)
 
-    return render_template('auth/login.html', usuario_preenchido='')
+    return render_template('auth/login.html', usuario_preenchido='', hide_sidebar=True)

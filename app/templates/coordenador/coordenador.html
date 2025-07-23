@@ -1,19 +1,28 @@
 {% extends 'base/index.html' %}
 
 {% block title %}Painel do Coordenador{% endblock %}
-{% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/coord.css') }}">
+
+{# CORREÇÃO AQUI: Troque 'styles' por 'style' e inclua layout.css #}
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> {# Importante para o layout base #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
 {% endblock %}
+
 {% block content %}
 <h1>Painel do Coordenador</h1>
-<button onclick="abrirModal()">+ Nova Sala</button>
 
-<a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">
-    <button type="button">Painel Funcionários</button>
-</a>
-<a href="{{ url_for('coordenador_bp.listar_reservas') }}">
-    <button type="button">Painel Reserva</button>
-</a>
+{# Agrupando os botões de ação para melhor layout com CSS #}
+<div class="painel-acoes">
+    <button type="button" class="button-primario" onclick="abrirModal()">+ Nova Sala</button>
+
+    <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="button-secundario">
+        Painel Funcionários
+    </a>
+    <a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="button-secundario">
+        Painel Reserva
+    </a>
+</div>
+
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <ul class="flash-messages">
@@ -24,32 +33,38 @@
   {% endif %}
 {% endwith %}
 
-<table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr>
-      <th>Nome</th>
-      <th>Status</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for sala in salas %}
-    <tr>
-      <td>{{ sala.nome_sala }}</td>
-      <td>{{ sala.status_sala or 'N/A' }}</td>
-      <td>
-        <a href="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" class="btn-cancelar">Editar</a>
+{# Tabela #}
+<div class="tabela-responsiva"> {# Adiciona um wrapper para responsividade da tabela #}
+    <table class="tabela-geral"> {# Troquei o style inline para classe CSS #}
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sala in salas %}
+            <tr>
+                <td>{{ sala.nome_sala }}</td>
+                <td><span class="status-tag status-{{ sala.status_sala | lower | replace(' ', '-') }}">{{ sala.status_sala or 'N/A' }}</span></td> {# Adicionei classes para estilizar o status #}
+                <td>
+                    <div class="tabela-acoes"> {# Agrupar botões de ação na tabela #}
+                        <a href="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" class="button-acao editar">Editar</a>
 
-        <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" method="POST" style="display:inline;"
-              onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome_sala }}?');">
-          <button type="submit" style="background-color: #e74c3c; color: white;">Excluir</button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+                        <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" method="POST" style="display:inline;"
+                              onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome_sala }}?');">
+                            <button type="submit" class="button-acao excluir">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
+{# Modal - Classes Bootstrap já estão OK, mas adicionarei alguns estilos para customização #}
 <div class="modal fade" id="modalNovaSala" tabindex="-1" aria-labelledby="tituloModalNovaSala" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -72,8 +87,9 @@
           </div>
 
           <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Salvar</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            {# Botões do modal agora com classes customizadas para padronizar #}
+            <button type="submit" class="button-primario">Salvar</button>
+            <button type="button" class="button-secundario" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </form>
       </div>

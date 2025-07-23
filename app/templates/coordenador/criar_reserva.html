@@ -3,6 +3,9 @@
 {% block title %}Criar Reserva{% endblock %}
 
 {% block content %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coord.css') }}">
+{% endblock %}
 <h2>Criar Nova Reserva</h2>
 
 <form method="POST">

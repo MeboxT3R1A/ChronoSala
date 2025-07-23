@@ -3,6 +3,9 @@
 {% block title %}Editar Sala{% endblock %}
 
 {% block content %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coord.css') }}">
+{% endblock %}
     <h1>Editar Sala</h1>
 
     {% with messages = get_flashed_messages(with_categories=true) %}

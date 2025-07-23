@@ -3,6 +3,9 @@
 {% block title %}Editar Funcionário{% endblock %}
 
 {% block content %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coord.css') }}">
+{% endblock %}
 <style>
     input, select {
         width: 100%;

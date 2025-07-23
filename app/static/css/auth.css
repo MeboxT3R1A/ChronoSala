@@ -1,0 +1,102 @@
+/* static/css/auth.css */
+
+.login-container {
+    background-color: #ffffff;
+    padding: var(--espacamento-lg);
+    border-radius: var(--borda-raio-padrao);
+    box-shadow: var(--sombra-media); /* Sombra mais proeminente para o card */
+    width: 100%;
+    max-width: 450px; /* Largura máxima para o formulário */
+    text-align: center;
+    animation: fadeIn 0.8s ease-out; /* Adiciona uma animação de entrada */
+    margin: 0 auto; /* Centraliza o container na página */
+    position: relative; /* Necessário para posicionar elementos internos */
+    flex-direction: column;
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-container h2 {
+    color: var(--azul-senac);
+    margin-bottom: var(--espacamento-md);
+    font-size: var(--fonte-tamanho-h2);
+    font-weight: 600; /* Um pouco mais encorpado */
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacamento-md); /* Espaçamento entre os campos */
+    margin-top: var(--espacamento-md);
+}
+
+.login-container label {
+    text-align: left;
+    margin-bottom: -0.5rem; /* Puxa a label para mais perto do input */
+    font-weight: 500; /* Menos negrito para um visual mais clean */
+    color: var(--cor-texto-secundario);
+    font-size: var(--fonte-tamanho-pequeno);
+}
+
+.login-container input {
+    padding: var(--espacamento-sm) var(--espacamento-md);
+    border: 1px solid var(--cor-borda-neutra);
+    border-radius: var(--borda-raio-padrao);
+    font-size: var(--fonte-tamanho-medio);
+    transition: var(--transicao-padrao);
+}
+
+.login-container input::placeholder {
+    color: #a0a0a0;
+}
+
+.login-container input:focus {
+    border-color: var(--laranja-senac); /* Destaque laranja no foco */
+    box-shadow: 0 0 0 3px rgba(var(--laranja-senac), 0.2);
+}
+
+.login-container .error-message { /* Use esta classe para mensagens de erro inline */
+    color: var(--cor-erro);
+    font-size: var(--fonte-tamanho-pequeno);
+    text-align: left;
+    margin-top: -0.5rem; /* Ajusta o espaçamento */
+}
+
+.login-container .button-entrar {
+    width: 100%;
+    padding: var(--espacamento-sm) var(--espacamento-md);
+    font-size: var(--fonte-tamanho-grande);
+    font-weight: 600;
+    margin-top: var(--espacamento-md);
+    letter-spacing: 0.5px; /* Pequeno espaçamento para melhor legibilidade */
+}
+
+/* Ajustes para flash messages dentro do container de login */
+.login-container .flash-messages {
+    margin-top: var(--espacamento-md);
+    margin-bottom: var(--espacamento-sm);
+    text-align: left; /* Garante que a mensagem esteja alinhada */
+}
+
+.login-container .flash-messages li {
+    font-size: var(--fonte-tamanho-pequeno);
+}
+
+/* Centraliza o conteúdo da página de login */
+.content-centered {
+    min-height: 100vh; /* Ocupa toda a altura da tela */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f6fa; /* Opcional: cor de fundo suave */
+}
