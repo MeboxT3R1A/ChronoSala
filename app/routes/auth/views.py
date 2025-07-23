@@ -1,9 +1,9 @@
 # app/routes/auth/views.py
 from flask import render_template, request, redirect, url_for, flash, session
-from app.db import get_db
 from . import login_bp
-from werkzeug.security import check_password_hash
-import pymysql.cursors
+
+from auth.services.auth_service import buscar_funcionario_por_usuario, verificar_senha
+from auth.services.session_manager import salvar_sessao, destino_por_funcao
 
 @login_bp.route('/', methods=['GET', 'POST'])
 def login():
@@ -15,25 +15,11 @@ def login():
         usuario_preenchido = usuario
 
         try:
-            db = get_db()
-            cursor = db.cursor(pymysql.cursors.DictCursor)
+            funcionario = buscar_funcionario_por_usuario(usuario)
 
-            query = "SELECT email, nome, funcao, senha FROM funcionario WHERE email = %s OR matricula = %s"
-            cursor.execute(query, (usuario, usuario))
-            funcionario = cursor.fetchone()
-
-            if funcionario and check_password_hash(funcionario['senha'], senha):
-                session['logged_in'] = True
-                session['user_role'] = funcionario['funcao']
-                session['user_name'] = funcionario['nome']
-                print('== ROLE SALVA NA SESSÃO:', session['user_role'])
-                
-                destinos = {
-                    'Coordenador': 'coordenador_bp.painel_coordenador',
-                    'Instrutor': 'instrutor_bp.painel_instrutor',
-                }
-                rota = destinos.get(funcionario['funcao'])
-
+            if funcionario and verificar_senha(senha, funcionario['senha']):
+                salvar_sessao(funcionario)
+                rota = destino_por_funcao(funcionario['funcao'])
 
                 if rota:
                     return redirect(url_for(rota))

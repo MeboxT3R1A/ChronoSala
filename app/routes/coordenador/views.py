@@ -1,11 +1,17 @@
 # app/routes/coordenador/views.py
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import (
+    render_template, request,
+    redirect, url_for, flash,
+)
 from app.db import get_db
-from app.routes.coordenador import coordenador_bp as coordenador
+from . import coordenador_bp as coordenador
 import pymysql.err
 import pymysql.cursors
-from datetime import datetime
 from app.decorators import login_required, role_required
+from werkzeug.security import generate_password_hash
+from coordenador.services import buscar_salas
+
+salas = buscar_salas(get_db())
 
 @coordenador.route('/')
 @login_required
@@ -95,7 +101,9 @@ def cadastro_usuario():
         email = request.form['email']
         nome = request.form['nome']
         matricula = request.form['matricula']
-        senha = request.form['senha']
+        senha_plana = request.form['senha']
+        senha_hash = generate_password_hash(senha_plana)
+
         funcao = request.form['funcao']
 
         try:
@@ -104,7 +112,7 @@ def cadastro_usuario():
                 cursor.execute("""
                     INSERT INTO funcionario (email, nome, matricula, senha, funcao)
                     VALUES (%s, %s, %s, %s, %s)
-                """, (email, nome, matricula, senha, funcao))
+                """, (email, nome, matricula, senha_hash, funcao))
                 conn.commit()
                 flash('Funcionário cadastrado com sucesso!', 'success')
         except pymysql.err.Error as err:
