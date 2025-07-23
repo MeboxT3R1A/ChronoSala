@@ -1,11 +1,23 @@
-<!-- app/templates/painel_funcionario.html -->
-{% extends 'index.html' %}
+{% extends 'base/index.html' %}
+
 {% block title %}Funcionários Cadastrados{% endblock %}
 {% block content %}
 <h1>Funcionários Cadastrados</h1>
 <a href="{{ url_for('coordenador_bp.cadastro_usuario') }}">
     <button type="button">Cadastro Usuário</button>
 </a>
+<form method="GET" action="{{ url_for('coordenador_bp.listar_funcionarios') }}" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+    <input type="text" name="busca" placeholder="Buscar por nome ou matrícula" value="{{ request.args.get('busca', '') }}" style="width: 300px; padding: 6px;">
+
+    <select name="filtro_funcao" style="width: 200px; padding: 6px;">
+        <option value="">Todas as funções</option>
+        <option value="coordenador" {% if request.args.get('filtro_funcao') == 'coordenador' %}selected{% endif %}>Coordenador</option>
+        <option value="instrutor" {% if request.args.get('filtro_funcao') == 'instrutor' %}selected{% endif %}>Instrutor</option>
+        <option value="administrador" {% if request.args.get('filtro_funcao') == 'administrador' %}selected{% endif %}>Administrador</option>
+    </select>
+
+    <button type="submit" style="padding: 6px 12px;">Buscar</button>
+</form>
 
 <table border="1" style="border-collapse: collapse; width: 100%; text-align: left;">
     <thead>

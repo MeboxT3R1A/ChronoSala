@@ -46,6 +46,6 @@ def login():
 
         except Exception as e:
             flash(f'Erro interno: {e}', 'error')
-            return render_template('login.html', usuario_preenchido=usuario_preenchido)
+            return render_template('auth/login.html', usuario_preenchido=usuario_preenchido)
 
-    return render_template('login.html', usuario_preenchido='')
+    return render_template('auth/login.html', usuario_preenchido='')
