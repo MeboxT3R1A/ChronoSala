@@ -1,38 +1,40 @@
-{# templates/coordenador/criar_reserva.html #}
 {% extends 'base/base.html' %}
 
 {% block title %}Criar Reserva{% endblock %}
 
-{% block content %}
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/coord.css') }}">
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
 {% endblock %}
-<h2>Criar Nova Reserva</h2>
 
-<form method="POST">
+
+{% block content %}
+<h2 style="margin-bottom: var(--espacamento-md);">Criar Nova Reserva</h2>
+
+<form method="POST" style="display: flex; flex-direction: column; gap: var(--espacamento-sm); max-width: 600px;">
     <label for="nome_sala">Sala:</label>
     <select name="nome_sala" required>
         <option value="">Selecione uma sala</option>
         {% for sala in salas %}
         <option value="{{ sala }}">{{ sala }}</option>
         {% endfor %}
-    </select><br><br>
+    </select>
 
     <label for="email">Email do usuário:</label>
-    <input type="email" name="email" required><br><br>
+    <input type="email" name="email" required>
 
     <label for="data_res">Data da reserva:</label>
-    <input type="date" name="data_res" required><br><br>
+    <input type="date" name="data_res" required>
 
     <label for="inicio">Horário de início:</label>
-    <input type="time" name="inicio" required><br><br>
+    <input type="time" name="inicio" required>
 
     <label for="termino">Horário de término:</label>
-    <input type="time" name="termino" required><br><br>
+    <input type="time" name="termino" required>
 
-    <button type="submit" class="btn btn-success">Salvar Reserva</button>
+    <div style="display: flex; gap: var(--espacamento-sm); margin-top: var(--espacamento-sm);">
+        <button type="submit" class="button button-primario">Salvar Reserva</button>
+        <a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="button">Cancelar</a>
+    </div>
 </form>
-<!-- Botão de cancelar fora do formulário -->
-
-<a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="btn btn-secondary"><button>Cancelar</button></a>
 {% endblock %}

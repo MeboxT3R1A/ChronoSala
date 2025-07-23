@@ -1,125 +1,62 @@
-{# templates/coordenador/painel_reserva.html #}
 {% extends 'base/base.html' %}
 
 {% block title %}Painel de Reservas{% endblock %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
+{% endblock %}
+
+
 {% block content %}
-<style>
-    .filtros-container {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 20px;
-    }
+<h1 style="margin-bottom: var(--espacamento-md);">Painel de Reservas</h1>
+<a href="{{ url_for('coordenador_bp.criar_reserva') }}" class="button button-primario" style="margin-bottom: var(--espacamento-md);">Criar Reserva</a>
 
-    .filtros-container form {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .filtros-container input,
-    .filtros-container select,
-    .filtros-container button {
-        padding: 5px 10px;
-        font-size: 14px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-    }
-
-    .filtros-container button {
-        background-color: #1e90ff;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-
-    .filtros-container button:hover {
-        background-color: #0f78d0;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th,
-    td {
-        padding: 10px;
-        border: 1px solid #ccc;
-        text-align: center;
-    }
-
-    th {
-        background-color: #f0f0f0;
-    }
-</style>
-
-<h1>Painel de Reservas</h1>
-<a href="{{ url_for('coordenador_bp.criar_reserva') }}" class="btn btn-primary"><button>Criar Reserva</button></a>
-
-
-<div class="filtros-container" style="gap: 15px; align-items: center;">
+<div class="filtros-container" style="display: flex; flex-wrap: wrap; gap: var(--espacamento-sm); align-items: center; margin-bottom: var(--espacamento-md);">
   <!-- Form de busca geral -->
-  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
-    <input
-      type="text"
-      name="busca"
-      placeholder="Pesquisar Sala, ID ou Email"
-      value="{{ request.args.get('busca', '') }}"
-      style="width: 350px; padding: 6px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px;"
-    />
-    <button type="submit" style="padding: 6px 12px; border-radius: 8px; background-color: #1e90ff; color: white; border: none; cursor: pointer;">
-      Buscar
-    </button>
+  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}" style="display: flex; gap: var(--espacamento-xs); align-items: center;">
+    <input type="text" name="busca" placeholder="Pesquisar Sala, ID ou Email" value="{{ request.args.get('busca', '') }}">
+    <button type="submit" class="button button-primario">Buscar</button>
   </form>
 
   <!-- Filtro por Sala -->
-  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
+  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}" style="display: flex; gap: var(--espacamento-xs); align-items: center;">
     <label for="sala">Filtrar por Sala:</label>
-    <select name="sala" id="sala" style="padding: 6px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px;">
+    <select name="sala" id="sala">
       <option value="">Todas</option>
       {% for sala in salas %}
       <option value="{{ sala }}" {% if sala == sala_selecionada %}selected{% endif %}>{{ sala }}</option>
       {% endfor %}
     </select>
-    <button type="submit" style="padding: 6px 12px; border-radius: 8px; background-color: #1e90ff; color: white; border: none; cursor: pointer;">
-      Filtrar
-    </button>
+    <button type="submit" class="button button-primario">Filtrar</button>
   </form>
 
   <!-- Filtro por Data -->
-  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
+  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}" style="display: flex; gap: var(--espacamento-xs); align-items: center;">
     <label for="data">Filtrar por Data:</label>
-    <input
-      type="date"
-      name="data"
-      id="data"
-      value="{{ data_selecionada }}"
-      style="padding: 6px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px;"
-    />
-    <button type="submit" style="padding: 6px 12px; border-radius: 8px; background-color: #1e90ff; color: white; border: none; cursor: pointer;">
-      Filtrar
-    </button>
+    <input type="date" name="data" id="data" value="{{ data_selecionada }}">
+    <button type="submit" class="button button-primario">Filtrar</button>
   </form>
 </div>
 
-<table>
-    <thead>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; background-color: var(--cor-fundo-cartao); box-shadow: var(--sombra-leve);">
+    <thead style="background-color: var(--azul-senac); color: white;">
         <tr>
-            <th>ID</th>
-            <th>Sala</th>
-            <th>Email</th>
-            <th>Início</th>
-            <th>Término</th>
-            <th>Data</th>
-            <th>Status Reserva</th>
-            <th>Status Chave</th>
-            <th>Ações</th>
+            <th style="padding: var(--espacamento-xs);">ID</th>
+            <th style="padding: var(--espacamento-xs);">Sala</th>
+            <th style="padding: var(--espacamento-xs);">Email</th>
+            <th style="padding: var(--espacamento-xs);">Início</th>
+            <th style="padding: var(--espacamento-xs);">Término</th>
+            <th style="padding: var(--espacamento-xs);">Data</th>
+            <th style="padding: var(--espacamento-xs);">Status Reserva</th>
+            <th style="padding: var(--espacamento-xs);">Status Chave</th>
+            <th style="padding: var(--espacamento-xs);">Ações</th>
         </tr>
     </thead>
     <tbody>
         {% for reserva in reservas %}
-        <tr>
+        <tr style="border-bottom: 1px solid var(--cor-borda-neutra); text-align: center;">
             <td>{{ reserva.id_res }}</td>
             <td>{{ reserva.nome_sala }}</td>
             <td>{{ reserva.email }}</td>
@@ -128,34 +65,20 @@
             <td>{{ reserva.data_res }}</td>
             <td>{{ reserva.status_res }}</td>
             <td>{{ reserva.status_chave }}</td>
-
-            <td>
+            <td style="display: flex; flex-direction: column; gap: var(--espacamento-xs); align-items: center;">
                 {% if reserva.status_res != 'cancelado' and reserva.status_chave == 'pendente' %}
-                <!-- Botão Entregar -->
-                <form method="POST" action="{{ url_for('coordenador_bp.entregar_chave', id_res=reserva.id_res) }}"
-                    style="display:inline;" class="form-entregar" data-data-reserva="{{ reserva.data_res }}">
-                    <button type="submit" class="btn btn-sm btn-success">Entregar</button>
+                <form method="POST" action="{{ url_for('coordenador_bp.entregar_chave', id_res=reserva.id_res) }}" class="form-entregar" data-data-reserva="{{ reserva.data_res }}">
+                    <button type="submit" class="button button-primario">Entregar</button>
                 </form>
-
-                <!-- Botão Cancelar -->
-                <form method="POST" action="{{ url_for('coordenador_bp.cancelar_reserva', id_res=reserva.id_res) }}"
-                    style="display:inline;">
-                    <button type="submit" onclick="return confirm('Tem certeza que quer cancelar esta reserva?');"
-                        class="btn btn-sm btn-danger">Cancelar</button>
+                <form method="POST" action="{{ url_for('coordenador_bp.cancelar_reserva', id_res=reserva.id_res) }}">
+                    <button type="submit" class="button" onclick="return confirm('Tem certeza que quer cancelar esta reserva?');">Cancelar</button>
                 </form>
-
                 {% elif reserva.status_chave == 'Chave retirada' %}
-                <!-- Chave entregue -->
                 <span class="badge bg-warning text-dark">Chave entregue</span>
-
-                <!-- Botão Devolver -->
-                <form method="POST" action="{{ url_for('coordenador_bp.devolver_chave', id_res=reserva.id_res) }}"
-                    style="display:inline;">
-                    <button type="submit" class="btn btn-sm btn-primary">Devolver</button>
+                <form method="POST" action="{{ url_for('coordenador_bp.devolver_chave', id_res=reserva.id_res) }}">
+                    <button type="submit" class="button button-primario">Devolver</button>
                 </form>
-
                 {% elif reserva.status_chave == 'Chave devolvida' %}
-                <!-- Chave devolvida -->
                 <span class="badge bg-success">Chave devolvida</span>
                 {% endif %}
 
@@ -164,8 +87,8 @@
                 {% endif %}
             </td>
         </tr>
-
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}

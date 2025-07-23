@@ -1,4 +1,4 @@
-{# templates/base/base.html #}
+<!-- templates/base/base.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -9,43 +9,46 @@
 
     {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
     {% endblock %}
 </head>
 
 <body>
-
-    {% if not hide_sidebar %}
-    <div id="sidebar" class="sidebar">
-        <span class="closebtn" onclick="toggleSidebar()">×</span>
-        <a href="{{ url_for('geral_bp.home') }}">🏠 Início</a>
-
-        {% if session.get('logged_in') %}
-            {% if session.get('user_role') == 'Coordenador' %}
-                <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">📊 Painel Coordenador</a>
-                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">👥 Painel Funcionário</a>
-                <a href="{{ url_for('coordenador_bp.listar_reservas') }}">🗓️ Painel Reserva</a>
-            {% elif session.get('user_role') == 'Instrutor' %}
-                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">🧑‍🏫 Painel Instrutor</a>
-            {% elif session.get('user_role') == 'Administrador' %}
-                <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">📊 Painel Coordenador</a>
-                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">🧑‍🏫 Painel Instrutor</a>
-                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">👥 Painel Funcionário</a>
-                <a href="{{ url_for('coordenador_bp.listar_reservas') }}">🗓️ Painel Reserva</a>
-            {% endif %}
-
-            <a href="{{ url_for('geral_bp.logout') }}">🚪 Sair ({{ session.get('user_name', 'Usuário') }})</a>
-        {% else %}
-            <a href="{{ url_for('login_bp.login') }}">🔐 Login</a>
-        {% endif %}
-    </div>
-    {% endif %}
-
-    <header {% if hide_sidebar %}class="hide-toggle"{% endif %}> {# <-- ADICIONE ESTA LINHA #}
+    <header>
         <nav class="navbar-custom">
-            {% if not hide_sidebar %} {# <-- Mantenha o botão de hambúrguer condicional #}
-            <span onclick="toggleSidebar()">☰</span>
-            {% endif %}
+            <a class="logo" href="{{ url_for('geral_bp.home') }}">ChronoSala</a>
+
+            <ul class="menu">
+                {% if session.get('logged_in') %}
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">Painéis</a>
+                        <div class="dropdown">
+                            {% if session.get('user_role') == 'Coordenador' %}
+                                <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Coordenador</a>
+                                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Funcionários</a>
+                                <a href="{{ url_for('coordenador_bp.listar_reservas') }}">Reservas</a>
+                            {% elif session.get('user_role') == 'Instrutor' %}
+                                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Instrutor</a>
+                            {% elif session.get('user_role') == 'Administrador' %}
+                                <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Coordenador</a>
+                                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Instrutor</a>
+                                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Funcionários</a>
+                                <a href="{{ url_for('coordenador_bp.listar_reservas') }}">Reservas</a>
+                            {% endif %}
+                        </div>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">Conta ▾</a>
+                        <div class="dropdown">
+                            <a href="{{ url_for('geral_bp.logout') }}">Sair ({{ session.get('user_name', 'Usuário') }})</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="menu-item">
+                        <a href="{{ url_for('login_bp.login') }}" class="menu-link">🔐 Login</a>
+                    </li>
+                {% endif %}
+            </ul>
         </nav>
     </header>
 
@@ -56,16 +59,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/reserva.js') }}"></script>
-
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById("sidebar");
-            const body = document.body;
-
-            sidebar.classList.toggle("active");
-            body.classList.toggle("sidebar-open");
-        }
-    </script>
 
     {% block scripts %}{% endblock %}
 </body>

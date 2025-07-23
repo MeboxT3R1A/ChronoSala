@@ -4,24 +4,12 @@
 {% block title %}Painel do Coordenador{% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> {# Importante para o layout base #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
 {% endblock %}
 
 {% block content %}
 <h1>Painel do Coordenador</h1>
-
-{# Agrupando os botões de ação para melhor layout com CSS #}
-<div class="painel-acoes">
-    <button type="button" class="button-primario" onclick="abrirModal()">+ Nova Sala</button>
-
-    <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="button-secundario">
-        Painel Funcionários
-    </a>
-    <a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="button-secundario">
-        Painel Reserva
-    </a>
-</div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -64,7 +52,6 @@
     </table>
 </div>
 
-{# Modal - Classes Bootstrap já estão OK, mas adicionarei alguns estilos para customização #}
 <div class="modal fade" id="modalNovaSala" tabindex="-1" aria-labelledby="tituloModalNovaSala" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

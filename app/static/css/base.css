@@ -59,15 +59,14 @@
 
 body {
     display: flex;
-    flex-direction: column; /* Coloca header e main em coluna */
-    min-height: 100vh; /* Garante que o body ocupa a altura total da viewport */
+    flex-direction: column; 
     position: relative;
     font-family: var(--fonte-familia-principal);
     font-size: var(--fonte-tamanho-base);
     line-height: 1.6;
     color: var(--cor-texto-principal);
     background-color: var(--cor-fundo-neutro);
-    -webkit-font-smoothing: antialiased; /* Para melhor renderização de fontes */
+    -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 }
 

@@ -1,3 +1,4 @@
+/*app/static/css/coordenador.css*/
 /* Painel de ações (botões do topo) */
 .painel-acoes {
     display: flex;
@@ -10,6 +11,7 @@
 .painel-acoes button {
     flex: 1 1 auto;
     max-width: 200px;
+    background-color: var();
 }
 
 /* Tabela geral */
