@@ -6,8 +6,8 @@ from flask import g
 DB_CONFIG = {
     "host": "localhost",
     "user": "root",
-    "port": 3307,
-    "password": "senac",
+    "port": 3306,
+    "password": "lasanha",
     "database": "chronosala",
     "cursorclass": pymysql.cursors.DictCursor
 }

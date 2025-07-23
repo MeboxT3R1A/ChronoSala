@@ -1,0 +1,124 @@
+/* Painel de ações (botões do topo) */
+.painel-acoes {
+    display: flex;
+    gap: var(--espacamento-md);
+    margin-bottom: var(--espacamento-lg);
+    flex-wrap: wrap;
+}
+
+.painel-acoes a,
+.painel-acoes button {
+    flex: 1 1 auto;
+    max-width: 200px;
+}
+
+/* Tabela geral */
+.tabela-responsiva {
+    overflow-x: auto;
+    background-color: var(--cor-fundo-cartao);
+    border-radius: var(--borda-raio-padrao);
+    box-shadow: var(--sombra-leve);
+    padding: var(--espacamento-md);
+}
+
+.tabela-geral {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fonte-tamanho-medio);
+    min-width: 600px;
+}
+
+.tabela-geral th, .tabela-geral td {
+    padding: var(--espacamento-sm);
+    text-align: left;
+    border-bottom: 1px solid var(--cor-borda-neutra);
+}
+
+.tabela-geral th {
+    background-color: var(--laranja-claro);
+    color: var(--azul-senac);
+    font-weight: 600;
+}
+
+.tabela-geral td {
+    background-color: #fff;
+}
+
+/* Ações na tabela */
+.tabela-acoes {
+    display: flex;
+    gap: var(--espacamento-xs);
+}
+
+.button-acao {
+    padding: var(--espacamento-xs) var(--espacamento-sm);
+    font-size: var(--fonte-tamanho-pequeno);
+    border-radius: var(--borda-raio-padrao);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transicao-padrao);
+}
+
+.button-acao.editar {
+    background-color: var(--cor-info);
+    color: #fff;
+}
+
+.button-acao.editar:hover {
+    background-color: #138496;
+}
+
+.button-acao.excluir {
+    background-color: var(--cor-erro);
+    color: #fff;
+}
+
+.button-acao.excluir:hover {
+    background-color: #c82333;
+}
+
+/* Tags de status */
+.status-tag {
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--borda-raio-padrao);
+    font-size: var(--fonte-tamanho-pequeno);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.status-ativa {
+    background-color: #d4edda;
+    color: var(--cor-sucesso);
+}
+
+.status-inativa {
+    background-color: #f8d7da;
+    color: var(--cor-erro);
+}
+
+.status-em-manutencao {
+    background-color: #fff3cd;
+    color: var(--cor-aviso);
+}
+
+/* Modal */
+.modal-header {
+    background-color: var(--azul-senac);
+    color: white;
+    border-top-left-radius: var(--borda-raio-padrao);
+    border-top-right-radius: var(--borda-raio-padrao);
+}
+
+.modal-title {
+    font-size: var(--fonte-tamanho-h4);
+    font-weight: 600;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--espacamento-sm);
+    padding: var(--espacamento-sm) var(--espacamento-md);
+}
