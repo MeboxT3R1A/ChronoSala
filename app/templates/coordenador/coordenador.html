@@ -4,8 +4,8 @@
 {% block title %}Painel do Coordenador{% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> {# Importante para o layout base #}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> {# Importante para o layout base #}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -13,62 +13,69 @@
 
 {# Agrupando os botões de ação para melhor layout com CSS #}
 <div class="painel-acoes">
-    <button type="button" class="button-primario" onclick="abrirModal()">+ Nova Sala</button>
+  <button>
+    <a href="{{ url_for('coordenador_bp.cadastrar_sala') }}" class="button-primario">
+      Cadastrar Sala
+    </a>
+  </button>
 
-    <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="button-secundario">
-        Painel Funcionários
-    </a>
-    <a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="button-secundario">
-        Painel Reserva
-    </a>
+  <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="button-secundario">
+    Painel Funcionários
+  </a>
+  <a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="button-secundario">
+    Painel Reserva
+  </a>
 </div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul class="flash-messages">
-      {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% if messages %}
+<ul class="flash-messages">
+  {% for category, message in messages %}
+  <li class="{{ category }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
 {% endwith %}
 
 {# Tabela #}
 <div class="tabela-responsiva"> {# Adiciona um wrapper para responsividade da tabela #}
-    <table class="tabela-geral"> {# Troquei o style inline para classe CSS #}
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Status</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sala in salas %}
-            <tr>
-                <td>{{ sala.nome_sala }}</td>
-                <td><span class="status-tag status-{{ sala.status_sala | lower | replace(' ', '-') }}">{{ sala.status_sala or 'N/A' }}</span></td> {# Adicionei classes para estilizar o status #}
-                <td>
-                    <div class="tabela-acoes"> {# Agrupar botões de ação na tabela #}
-                        <a href="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" class="button-acao editar">Editar</a>
+  <table class="tabela-geral"> {# Troquei o style inline para classe CSS #}
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sala in salas %}
+      <tr>
+        <td>{{ sala.nome_sala }}</td>
+        <td><span class="status-tag status-{{ sala.status_sala | lower | replace(' ', '-') }}">{{ sala.status_sala or
+            'N/A' }}</span></td> {# Adicionei classes para estilizar o status #}
+        <td>
+          <div class="tabela-acoes"> {# Agrupar botões de ação na tabela #}
+            <a href="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}"
+              class="button-acao editar">Editar</a>
 
-                        <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" method="POST" style="display:inline;"
-                              onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome_sala }}?');">
-                            <button type="submit" class="button-acao excluir">Excluir</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" method="POST"
+              style="display:inline;" onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome_sala }}?');">
+              <button type="submit" class="button-acao excluir">Excluir</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
 {# Modal - Classes Bootstrap já estão OK, mas adicionarei alguns estilos para customização #}
+{# esse model vai ser utilizado futuramente, no momento não tem nada chamando esse model e nada vinculado. #}
 <div class="modal fade" id="modalNovaSala" tabindex="-1" aria-labelledby="tituloModalNovaSala" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-    
+
       <div class="modal-header">
         <h5 class="modal-title" id="tituloModalNovaSala">Adicionar Nova Sala</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>

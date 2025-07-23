@@ -322,3 +322,34 @@ def cancelar_reserva(id_res):
     except Exception as e:
         flash(f'Erro ao cancelar reserva: {e}', 'danger')
     return redirect(url_for('coordenador_bp.listar_reservas'))
+
+
+
+@coordenador.route('/cadastrar_sala', methods=['GET', 'POST'])
+@login_required
+@role_required(['Coordenador'])
+def cadastrar_sala():
+    """
+    Rota para cadastrar uma nova sala.
+    """
+    if request.method == 'POST':
+        nome_sala = request.form['nome_sala']
+        status_sala = request.form.get('status_sala', 'disponivel')  # Valor padrão
+
+        try:
+            conn = get_db()
+            with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
+                cursor.execute(
+                    "INSERT INTO sala (nome_sala, status_sala) VALUES (%s, %s)",
+                    (nome_sala, status_sala)
+                )
+                conn.commit()
+                flash('Sala cadastrada com sucesso!', 'success')
+                return redirect(url_for('coordenador_bp.painel_coordenador'))
+
+        except pymysql.err.IntegrityError:
+            flash('Já existe uma sala com este nome.', 'error')
+        except Exception as e:
+            flash(f'Erro ao cadastrar sala: {e}', 'error')
+
+    return render_template('coordenador/cadastrar_sala.html')

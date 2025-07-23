@@ -1,0 +1,27 @@
+{# templates/coordenador/cadastrar_sala.html #}
+{% extends 'base/base.html' %}
+
+{% block title %}Cadastrar Sala{% endblock %}
+
+{% block content %}
+<h1>Cadastrar Nova Sala</h1>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="nome_sala" class="form-label">Nome da Sala*</label>
+        <input type="text" class="form-control" id="nome_sala" name="nome_sala" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="status_sala" class="form-label">Status*</label>
+        <select class="form-select" id="status_sala" name="status_sala" required>
+            <option value="disponivel" selected>Disponível</option>
+            <option value="reservado">Reservado</option>
+            <option value="manutenção">Manutenção</option>
+        </select>
+    </div>
+
+    <button type="submit" class="button-primario">Cadastrar Sala</button>
+    <a href="{{ url_for('coordenador_bp.painel_coordenador') }}" class="button-secundario">Cancelar</a>
+</form>
+{% endblock %}
