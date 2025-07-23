@@ -57,25 +57,49 @@
 <a href="{{ url_for('coordenador_bp.criar_reserva') }}" class="btn btn-primary"><button>Criar Reserva</button></a>
 
 
-<div class="filtros-container">
-    <!-- Filtro por Sala -->
-    <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
-        <label for="sala">Filtrar por Sala:</label>
-        <select name="sala" id="sala">
-            <option value="">Todas</option>
-            {% for sala in salas %}
-            <option value="{{ sala }}" {% if sala==sala_selecionada %}selected{% endif %}>{{ sala }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Filtrar</button>
-    </form>
+<div class="filtros-container" style="gap: 15px; align-items: center;">
+  <!-- Form de busca geral -->
+  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
+    <input
+      type="text"
+      name="busca"
+      placeholder="Pesquisar Sala, ID ou Email"
+      value="{{ request.args.get('busca', '') }}"
+      style="width: 350px; padding: 6px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px;"
+    />
+    <button type="submit" style="padding: 6px 12px; border-radius: 8px; background-color: #1e90ff; color: white; border: none; cursor: pointer;">
+      Buscar
+    </button>
+  </form>
 
-    <!-- Filtro por Data -->
-    <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
-        <label for="data">Filtrar por Data:</label>
-        <input type="date" name="data" id="data" value="{{ data_selecionada }}">
-        <button type="submit">Filtrar</button>
-    </form>
+  <!-- Filtro por Sala -->
+  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
+    <label for="sala">Filtrar por Sala:</label>
+    <select name="sala" id="sala" style="padding: 6px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px;">
+      <option value="">Todas</option>
+      {% for sala in salas %}
+      <option value="{{ sala }}" {% if sala == sala_selecionada %}selected{% endif %}>{{ sala }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" style="padding: 6px 12px; border-radius: 8px; background-color: #1e90ff; color: white; border: none; cursor: pointer;">
+      Filtrar
+    </button>
+  </form>
+
+  <!-- Filtro por Data -->
+  <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}">
+    <label for="data">Filtrar por Data:</label>
+    <input
+      type="date"
+      name="data"
+      id="data"
+      value="{{ data_selecionada }}"
+      style="padding: 6px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px;"
+    />
+    <button type="submit" style="padding: 6px 12px; border-radius: 8px; background-color: #1e90ff; color: white; border: none; cursor: pointer;">
+      Filtrar
+    </button>
+  </form>
 </div>
 
 <table>
@@ -108,9 +132,8 @@
                 {% if reserva.status_res != 'cancelado' and reserva.status_chave == 'pendente' %}
                 <!-- Botão Entregar -->
                 <form method="POST" action="{{ url_for('coordenador_bp.entregar_chave', id_res=reserva.id_res) }}"
-                    style="display:inline;">
-                    <button type="submit" onclick="return confirm('Você tem certeza que quer entregar a chave?');"
-                        class="btn btn-sm btn-success">Entregar</button>
+                    style="display:inline;" class="form-entregar" data-data-reserva="{{ reserva.data_res }}">
+                    <button type="submit" class="btn btn-sm btn-success">Entregar</button>
                 </form>
 
                 <!-- Botão Cancelar -->

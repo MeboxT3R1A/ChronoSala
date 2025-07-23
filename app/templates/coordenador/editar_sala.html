@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Sala</title>
-</head>
-<body>
+{% extends 'index.html' %}
+
+{% block title %}Editar Sala{% endblock %}
+
+{% block content %}
     <h1>Editar Sala</h1>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -17,18 +15,20 @@
       {% endif %}
     {% endwith %}
 
-    <form action="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" method="POST">
+    <form action="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" method="POST"
+          style="max-width: 500px;">
         <label for="nome">Nome da Sala:</label><br>
-        <input type="text" id="nome" name="nome" value="{{ sala.nome_sala }}" readonly><br><br>
+        <input type="text" id="nome" name="nome" value="{{ sala.nome_sala }}" readonly
+               style="width: 100%; padding: 8px; margin-bottom: 15px;"><br>
 
         <label for="status">Status:</label><br>
-        <select id="status" name="status">
+        <select id="status" name="status"
+                style="width: 100%; padding: 8px; margin-bottom: 15px;">
             <option value="disponivel" {% if sala.status_sala == 'disponivel' %}selected{% endif %}>Disponível</option>
             <option value="reservado" {% if sala.status_sala == 'reservado' %}selected{% endif %}>Reservado</option>
             <option value="manutenção" {% if sala.status_sala == 'manutenção' %}selected{% endif %}>Em Manutenção</option>
-        </select><br><br>
+        </select><br>
 
-        <button type="submit">Salvar Alterações</button>
+        <button type="submit" style="padding: 10px 20px;">Salvar Alterações</button>
     </form>
-</body>
-</html>
+{% endblock %}

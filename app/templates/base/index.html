@@ -6,7 +6,6 @@
     <title>{% block title %}Sistema de Salas{% endblock %}</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     {% block style %}{% endblock %}
@@ -14,47 +13,47 @@
 
 <body>
 
-    <!-- Botão do menu hambúrguer (☰) -->
-    <div class="menu-button" onclick="toggleSidebar()">☰</div>
-
-    <!-- Sidebar oculta -->
+    <!-- SIDEBAR (com todos os links) -->
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">×</a>
-        {% block sidebar %}
         <a href="{{ url_for('geral_bp.home') }}">Início</a>
-        <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Painel Coordenador</a>
-        <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Painel Instrutor</a>
-        <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Painel Funcionário</a>
-        <a href="{{ url_for('coordenador_bp.listar_reservas') }}">Painel Reserva</a>
-        {% endblock %}
+
+        {% if session.get('logged_in') %}
+            {% if session.get('user_role') == 'Coordenador' %}
+                <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Painel Coordenador</a>
+                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Painel Funcionário</a>
+                <a href="{{ url_for('coordenador_bp.listar_reservas') }}">Painel Reserva</a>
+            {% elif session.get('user_role') == 'Instrutor' %}
+                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Painel Instrutor</a>
+            {% elif session.get('user_role') == 'Administrador' %}
+                <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Painel Coordenador</a>
+                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Painel Instrutor</a>
+                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Painel Funcionário</a>
+                <a href="{{ url_for('coordenador_bp.listar_reservas') }}">Painel Reserva</a>
+            {% endif %}
+
+            <a href="{{ url_for('geral_bp.logout') }}">Sair ({{ session.get('user_name', 'Usuário') }})</a>
+        {% else %}
+            <a href="{{ url_for('login_bp.login') }}">Login</a>
+        {% endif %}
     </div>
 
-    <!-- Cabeçalho padrão que você já usava -->
+    <!-- TOPO COM APENAS O BOTÃO ☰ -->
     <header>
-        <nav>
-            <a href="{{ url_for('geral_bp.home') }}">Início</a>
-            {% if session.get('logged_in') %}
-            {% if session.get('user_role') == 'Coordenador' or session.get('user_role') == 'Administrador' %}
-            <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Painel Coordenador</a>
-            {% endif %}
-            {% if session.get('user_role') == 'Instrutor' or session.get('user_role') == 'Administrador' %}
-            <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Painel Instrutor</a>
-            {% endif %}
-            <a href="{{ url_for('geral_bp.logout') }}">Sair ({{ session.get('user_name', 'Usuário') }})</a>
-            {% else %}
-            <a href="{{ url_for('login_bp.login') }}">Login</a>
-            {% endif %}
+        <nav class="navbar-custom">
+            <span  onclick="toggleSidebar()">☰</span>
         </nav>
     </header>
 
-    <!-- Conteúdo principal -->
+    <!-- CONTEÚDO PRINCIPAL -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
+    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/reserva.js') }}"></script>
 
     <script>
         function toggleSidebar() {
