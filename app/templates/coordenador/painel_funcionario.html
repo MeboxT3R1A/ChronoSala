@@ -3,58 +3,77 @@
 {% block title %}Funcionários Cadastrados{% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
 {% endblock %}
 
 {% block content %}
-<h1>Funcionários Cadastrados</h1>
+<div class="container-coordenador">
+    <div class="panel-header">
+        <h1><i class="fas fa-users"></i> Funcionários Cadastrados</h1>
+        
+        <div class="action-buttons">
+            <a href="{{ url_for('coordenador_bp.cadastro_usuario') }}" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Novo Funcionário
+            </a>
+        </div>
+    </div>
 
-<a href="{{ url_for('coordenador_bp.cadastro_usuario') }}" class="button button-primario" style="margin-bottom: var(--espacamento-sm);">
-    Cadastro Usuário
-</a>
+    <div class="card">
+        <form method="GET" action="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="search-form">
+            <div class="form-group">
+                <input type="text" name="busca" placeholder="Buscar por nome ou matrícula" 
+                       value="{{ request.args.get('busca', '') }}" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <select name="filtro_funcao" class="form-control">
+                    <option value="">Todas as funções</option>
+                    <option value="coordenador" {% if request.args.get('filtro_funcao') == 'coordenador' %}selected{% endif %}>Coordenador</option>
+                    <option value="instrutor" {% if request.args.get('filtro_funcao') == 'instrutor' %}selected{% endif %}>Instrutor</option>
+                    <option value="administrador" {% if request.args.get('filtro_funcao') == 'administrador' %}selected{% endif %}>Administrador</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </form>
 
-<form method="GET" action="{{ url_for('coordenador_bp.listar_funcionarios') }}" style="margin-bottom: var(--espacamento-md); display: flex; gap: var(--espacamento-sm); align-items: center; flex-wrap: wrap;">
-    <input type="text" name="busca" placeholder="Buscar por nome ou matrícula" value="{{ request.args.get('busca', '') }}" style="max-width: 300px;">
+        <div class="table-responsive">
+            <table class="table-salas">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Nome</th>
+                        <th>Matrícula</th>
+                        <th>Função</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for funcionario in funcionarios %}
+                    <tr>
+                        <td>{{ funcionario.email }}</td>
+                        <td>{{ funcionario.nome }}</td>
+                        <td>{{ funcionario.matricula }}</td>
+                        <td class="text-capitalize">{{ funcionario.funcao }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('coordenador_bp.editar_funcionario', email=funcionario.email) }}" 
+                               class="btn-action btn-edit">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-    <select name="filtro_funcao" style="max-width: 200px;">
-        <option value="">Todas as funções</option>
-        <option value="coordenador" {% if request.args.get('filtro_funcao') == 'coordenador' %}selected{% endif %}>Coordenador</option>
-        <option value="instrutor" {% if request.args.get('filtro_funcao') == 'instrutor' %}selected{% endif %}>Instrutor</option>
-        <option value="administrador" {% if request.args.get('filtro_funcao') == 'administrador' %}selected{% endif %}>Administrador</option>
-    </select>
-
-    <button type="submit" class="button button-primario">Buscar</button>
-</form>
-
-<div style="overflow-x: auto">
-<table style="border-collapse: collapse; width: 100%; background-color: var(--cor-fundo-cartao); box-shadow: var(--sombra-leve);">
-    <thead style="background-color: var(--azul-senac); color: white;">
-        <tr>
-            <th style="padding: var(--espacamento-xs);">Email</th>
-            <th style="padding: var(--espacamento-xs);">Nome</th>
-            <th style="padding: var(--espacamento-xs);">Matrícula</th>
-            <th style="padding: var(--espacamento-xs);">Função</th>
-            <th style="padding: var(--espacamento-xs);">Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for funcionario in funcionarios %}
-        <tr style="border-bottom: 1px solid var(--cor-borda-neutra);">
-            <td style="padding: var(--espacamento-xs);">{{ funcionario.email }}</td>
-            <td style="padding: var(--espacamento-xs);">{{ funcionario.nome }}</td>
-            <td style="padding: var(--espacamento-xs);">{{ funcionario.matricula }}</td>
-            <td style="padding: var(--espacamento-xs); text-transform: capitalize;">{{ funcionario.funcao }}</td>
-            <td style="padding: var(--espacamento-xs);">
-                <a href="{{ url_for('coordenador_bp.editar_funcionario', email=funcionario.email) }}" class="button button-primario">Editar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        {% if not funcionarios %}
+        <div class="empty-state">
+            <p>Nenhum funcionário cadastrado ainda.</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
-
-{% if not funcionarios %}
-    <p style="margin-top: var(--espacamento-sm);">Nenhum funcionário cadastrado ainda.</p>
-{% endif %}
 {% endblock %}

@@ -20,17 +20,21 @@ ChronoSala/
 │   │       └── views.py
 │   ├── static/
 │   │   ├── css/
-│   │   │   ├── style.css
-│   │   │   ├── styleLogin.css
-│   │   │   └── style_erro.css
+│   │   │   ├── auth.css
+│   │   │   ├── base.css
+│   │   │   ├── coordenador.css
+│   │   │   ├── index.css
+│   │   │   ├── instrutor.css
+│   │   │   ├── layout.css
+│   │   │   ├── style_erro.css
+│   │   │   └── variables.css
 │   │   └── js/
 │   │       ├── login.js
 │   │       ├── reserva.js
 │   │       └── script.js
 │   ├── templates/
 │   │   ├── auth/
-│   │   │   ├── login.html
-│   │   │   └── loginTeste.html
+│   │   │   └── login.html
 │   │   ├── base/
 │   │   │   └── base.html
 │   │   ├── coordenador/
@@ -48,7 +52,6 @@ ChronoSala/
 │   └── test/
 │       └── teste.py
 ├── config.py
-├── estrutura.txt
 ├── gerar_estrutura.py ← Gera estrutura de diretórios (essa aqui)
 ├── hasheador_senha.py
 ├── requirements.txt

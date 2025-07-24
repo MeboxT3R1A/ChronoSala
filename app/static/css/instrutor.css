@@ -1,0 +1,110 @@
+/* static/css/instrutor.css */
+.container-instrutor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--espacamento-lg);
+}
+
+.salas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--espacamento-md);
+    margin-top: var(--espacamento-lg);
+}
+
+.sala-card {
+    background: var(--cor-fundo-cartao);
+    border-radius: var(--borda-raio-md);
+    box-shadow: var(--sombra-sm);
+    padding: var(--espacamento-md);
+    transition: var(--transicao-padrao);
+}
+
+.sala-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--sombra-md);
+}
+
+.sala-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: var(--borda-raio-sm);
+    margin-bottom: var(--espacamento-sm);
+}
+
+.sala-card h3 {
+    color: var(--azul-senac);
+    margin-bottom: var(--espacamento-sm);
+}
+
+.status {
+    display: inline-block;
+    padding: var(--espacamento-xs) var(--espacamento-sm);
+    border-radius: var(--borda-raio-pill);
+    font-size: var(--fonte-tamanho-sm);
+    font-weight: 600;
+    margin-bottom: var(--espacamento-md);
+}
+
+.status.disponivel {
+    background-color: var(--cor-sucesso);
+    color: white;
+}
+
+.status.ocupado {
+    background-color: var(--cor-aviso);
+    color: var(--cinza-900);
+}
+
+.status.manutenção {
+    background-color: var(--cor-erro);
+    color: white;
+}
+
+/* Modal de reserva */
+.modal-reserva {
+    display: none;
+    position: fixed;
+    z-index: var(--z-index-modal);
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: var(--cor-fundo-cartao);
+    margin: 10% auto;
+    padding: var(--espacamento-lg);
+    border-radius: var(--borda-raio-md);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--sombra-lg);
+}
+
+.close-modal {
+    color: var(--cor-erro);
+    float: right;
+    font-size: var(--fonte-tamanho-xl);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-reserva {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacamento-md);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacamento-xs);
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--azul-senac);
+}

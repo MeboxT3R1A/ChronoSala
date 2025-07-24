@@ -1,24 +1,174 @@
-/* static/css/auth.css */
+/* Importação das variáveis */
+@import url('variables.css');
 
+/* Estilos base */
 .login-container {
-    background-color: #ffffff;
-    padding: var(--espacamento-lg);
-    border-radius: var(--borda-raio-padrao);
-    box-shadow: var(--sombra-media); /* Sombra mais proeminente para o card */
-    width: 100%;
-    max-width: 450px; /* Largura máxima para o formulário */
-    text-align: center;
-    animation: fadeIn 0.8s ease-out; /* Adiciona uma animação de entrada */
-    margin: 0 auto; /* Centraliza o container na página */
-    position: relative; /* Necessário para posicionar elementos internos */
-    flex-direction: column;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: var(--espacamento-lg);
+    background-color: var(--cinza-100);
 }
 
+.login-box {
+    background: var(--cor-fundo-cartao);
+    width: 100%;
+    max-width: 400px;
+    padding: var(--espacamento-xl);
+    border-radius: var(--borda-raio-lg);
+    box-shadow: var(--sombra-md);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: var(--espacamento-lg);
+}
+
+.login-header i {
+    font-size: 2.5rem;
+    color: var(--azul-senac);
+    margin-bottom: var(--espacamento-sm);
+}
+
+.login-header h1 {
+    color: var(--azul-senac);
+    font-size: var(--fonte-tamanho-h4);
+}
+
+/* Mensagens */
+.login-messages {
+    margin-bottom: var(--espacamento-lg);
+}
+
+.message {
+    padding: var(--espacamento-sm);
+    border-radius: var(--borda-raio-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--espacamento-sm);
+    font-size: var(--fonte-tamanho-sm);
+    margin-bottom: var(--espacamento-xs);
+}
+
+.message.success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--cor-sucesso);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.message.error {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--cor-erro);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+/* Formulário */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacamento-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacamento-xs);
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: var(--fonte-tamanho-sm);
+    color: var(--cinza-700);
+}
+
+.input-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-field i {
+    position: absolute;
+    left: var(--espacamento-md);
+    color: var(--cinza-500);
+}
+
+.input-field input {
+    width: 100%;
+    padding: var(--espacamento-sm) var(--espacamento-md) var(--espacamento-sm) calc(var(--espacamento-md) * 2.5);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--borda-raio-sm);
+    font-size: var(--fonte-tamanho-md);
+    transition: var(--transicao-padrao);
+}
+
+.input-field input:focus {
+    outline: none;
+    border-color: var(--azul-senac);
+    box-shadow: 0 0 0 0.2rem rgba(0, 74, 141, 0.1);
+}
+
+/* Campo de senha específico */
+.password-field {
+    position: relative;
+}
+
+.password-field .show-password {
+    position: absolute;
+    right: var(--espacamento-sm);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: var(--cinza-500);
+    cursor: pointer;
+    transition: var(--transicao-padrao);
+}
+
+.password-field .show-password:hover {
+    background-color: var(--cinza-200);
+    color: var(--azul-senac);
+}
+
+/* Botão */
+.login-button {
+    width: 100%;
+    padding: var(--espacamento-md);
+    background-color: var(--azul-senac);
+    color: white;
+    border: none;
+    border-radius: var(--borda-raio-sm);
+    font-size: var(--fonte-tamanho-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transicao-padrao);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espacamento-sm);
+    margin-top: var(--espacamento-sm);
+}
+
+.login-button:hover {
+    background-color: var(--laranja-senac);
+    transform: translateY(-2px);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+/* Animações */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
@@ -26,77 +176,13 @@
     }
 }
 
-.login-container h2 {
-    color: var(--azul-senac);
-    margin-bottom: var(--espacamento-md);
-    font-size: var(--fonte-tamanho-h2);
-    font-weight: 600; /* Um pouco mais encorpado */
-}
-
-.login-container form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espacamento-md); /* Espaçamento entre os campos */
-    margin-top: var(--espacamento-md);
-}
-
-.login-container label {
-    text-align: left;
-    margin-bottom: -0.5rem; /* Puxa a label para mais perto do input */
-    font-weight: 500; /* Menos negrito para um visual mais clean */
-    color: var(--cor-texto-secundario);
-    font-size: var(--fonte-tamanho-pequeno);
-}
-
-.login-container input {
-    padding: var(--espacamento-sm) var(--espacamento-md);
-    border: 1px solid var(--cor-borda-neutra);
-    border-radius: var(--borda-raio-padrao);
-    font-size: var(--fonte-tamanho-medio);
-    transition: var(--transicao-padrao);
-}
-
-.login-container input::placeholder {
-    color: #a0a0a0;
-}
-
-.login-container input:focus {
-    border-color: var(--laranja-senac); /* Destaque laranja no foco */
-    box-shadow: 0 0 0 3px rgba(var(--laranja-senac), 0.2);
-}
-
-.login-container .error-message { /* Use esta classe para mensagens de erro inline */
-    color: var(--cor-erro);
-    font-size: var(--fonte-tamanho-pequeno);
-    text-align: left;
-    margin-top: -0.5rem; /* Ajusta o espaçamento */
-}
-
-.login-container .button-entrar {
-    width: 100%;
-    padding: var(--espacamento-sm) var(--espacamento-md);
-    font-size: var(--fonte-tamanho-grande);
-    font-weight: 600;
-    margin-top: var(--espacamento-md);
-    letter-spacing: 0.5px; /* Pequeno espaçamento para melhor legibilidade */
-}
-
-/* Ajustes para flash messages dentro do container de login */
-.login-container .flash-messages {
-    margin-top: var(--espacamento-md);
-    margin-bottom: var(--espacamento-sm);
-    text-align: left; /* Garante que a mensagem esteja alinhada */
-}
-
-.login-container .flash-messages li {
-    font-size: var(--fonte-tamanho-pequeno);
-}
-
-/* Centraliza o conteúdo da página de login */
-.content-centered {
-    min-height: 100vh; /* Ocupa toda a altura da tela */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f5f6fa; /* Opcional: cor de fundo suave */
+/* Responsivo */
+@media (max-width: 768px) {
+    .login-box {
+        padding: var(--espacamento-lg);
+    }
+    
+    .login-container {
+        padding: var(--espacamento-md);
+    }
 }

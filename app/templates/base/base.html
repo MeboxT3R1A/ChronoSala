@@ -1,66 +1,108 @@
-<!-- templates/base/base.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Sistema de Salas{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    {% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    {% endblock %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Sistema de Salas{% endblock %}</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Base -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+  
+  {% block style %}{% endblock %}
 </head>
 
 <body>
-    <header>
-        <nav class="navbar-custom">
-            <a class="logo" href="{{ url_for('geral_bp.home') }}">ChronoSala</a>
-
-            <ul class="menu">
-                {% if session.get('logged_in') %}
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">Painéis</a>
-                        <div class="dropdown">
-                            {% if session.get('user_role') == 'Coordenador' %}
-                                <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Coordenador</a>
-                                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Funcionários</a>
-                                <a href="{{ url_for('coordenador_bp.listar_reservas') }}">Reservas</a>
-                            {% elif session.get('user_role') == 'Instrutor' %}
-                                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Instrutor</a>
-                            {% elif session.get('user_role') == 'Administrador' %}
-                                <a href="{{ url_for('coordenador_bp.painel_coordenador') }}">Coordenador</a>
-                                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}">Instrutor</a>
-                                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}">Funcionários</a>
-                                <a href="{{ url_for('coordenador_bp.listar_reservas') }}">Reservas</a>
-                            {% endif %}
-                        </div>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">Conta ▾</a>
-                        <div class="dropdown">
-                            <a href="{{ url_for('geral_bp.logout') }}">Sair ({{ session.get('user_name', 'Usuário') }})</a>
-                        </div>
-                    </li>
-                {% else %}
-                    <li class="menu-item">
-                        <a href="{{ url_for('login_bp.login') }}" class="menu-link">🔐 Login</a>
-                    </li>
+<header class="header">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="{{ url_for('geral_bp.home') }}" class="logo">
+                <i class="fas fa-calendar-check"></i> 
+                <span class="logo-text">ChronoSala</span>
+                {% if session.get('user_role') %}
+                    <span class="user-role-badge">{{ session.get('user_role') }}</span>
                 {% endif %}
-            </ul>
-        </nav>
-    </header>
+            </a>
+        </div>
+        
+        <div class="navbar-actions">
+            {% if session.get('logged_in') %}
+            <div class="user-menu">
+                <div class="user-greeting">
+                    <i class="fas fa-user-circle"></i>
+                    <span>{{ session.get('user_name', 'Usuário') }}</span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('geral_bp.logout') }}" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <a href="{{ url_for('login_bp.login') }}" class="btn btn-login">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+    
+    <!-- Menu de Navegação -->
+    <nav class="sub-nav">
+        <ul class="sub-nav-list">
+            {% if session.get('logged_in') %}
+                {% if session.get('user_role') == 'Coordenador' or session.get('user_role') == 'Administrador' %}
+                <li>
+                    <a href="{{ url_for('coordenador_bp.painel_coordenador') }}" class="sub-nav-link">
+                        <i class="fas fa-tachometer-alt"></i> Painel
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="sub-nav-link">
+                        <i class="fas fa-users"></i> Funcionários
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="sub-nav-link">
+                        <i class="fas fa-calendar-alt"></i> Reservas
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% if session.get('user_role') == 'Instrutor' or session.get('user_role') == 'Administrador' %}
+                <li>
+                    <a href="{{ url_for('instrutor_bp.painel_instrutor') }}" class="sub-nav-link">
+                        <i class="fas fa-chalkboard-teacher"></i> Instrutor
+                    </a>
+                </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </nav>
+</header>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+  <main class="main">
+    {% block content %}{% endblock %}
+  </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/reserva.js') }}"></script>
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; <span id="current-year"></span> ChronoSala - Sistema de Gerenciamento de Salas</p>
+    </div>
+  </footer>
 
-    {% block scripts %}{% endblock %}
+  <!-- Scripts -->
+  <script>
+    // Atualiza o ano dinamicamente
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+  </script>
+  
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block scripts %}{% endblock %}
 </body>
-
+    
 </html>
