@@ -5,6 +5,7 @@ def salvar_sessao(funcionario):
     session['logged_in'] = True
     session['user_role'] = funcionario['funcao']
     session['user_name'] = funcionario['nome']
+    print("DEBUG - Sessão salva:", dict(session))
 
 def limpar_sessao():
     session.clear()

@@ -1,37 +1,20 @@
 # app/routes/auth/services/auth_service.py
-from app.db import get_db
+from app.db import execute_query
 from werkzeug.security import check_password_hash
-import pymysql.cursors
 
-def autenticar_usuario(usuario_input, senha_input):
-    try:
-        db = get_db()
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-
-        query = "SELECT email, nome, funcao, senha FROM funcionario WHERE email = %s OR matricula = %s"
-        cursor.execute(query, (usuario_input, usuario_input))
-        funcionario = cursor.fetchone()
-
-        if funcionario and check_password_hash(funcionario['senha'], senha_input):
-            return {
-                'nome': funcionario['nome'],
-                'funcao': funcionario['funcao'],
-                'autenticado': True
-            }
-        else:
-            return { 'autenticado': False }
-
-    except Exception as e:
-        raise Exception(f"Erro ao autenticar: {e}")
-
+def autenticar_login(usuario_input, senha_input):
+    funcionario = buscar_funcionario_por_usuario(usuario_input)
+    if funcionario and verificar_senha(senha_input, funcionario['senha']):
+        return {
+            'nome': funcionario['nome'],
+            'funcao': funcionario['funcao'],
+            'senha': funcionario['senha']
+        }
+    return None
 
 def buscar_funcionario_por_usuario(usuario):
-    db = get_db()
-    cursor = db.cursor(pymysql.cursors.DictCursor)
-
     query = "SELECT * FROM funcionario WHERE email = %s OR matricula = %s"
-    cursor.execute(query, (usuario, usuario))
-    return cursor.fetchone()
+    return execute_query(query, (usuario, usuario), fetchone=True)
 
 def verificar_senha(senha_digitada, senha_hash):
     return check_password_hash(senha_hash, senha_digitada)
