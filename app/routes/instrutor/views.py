@@ -139,3 +139,49 @@ def minhas_reservas():
         print("Erro ao buscar reservas do usuário:", e)
         flash("Erro ao carregar reservas.", "danger")
         return redirect(url_for('instrutor_bp.painel_instrutor'))
+@instrutor_bp.route('/cancelar_reserva/<int:id_res>', methods=['POST'])
+@login_required
+@role_required(['Instrutor', 'Administrador'])
+def cancelar_reserva(id_res):
+    motivo = request.form.get('motivo_cancelamento', '').strip()
+    
+    if not motivo:
+        flash('Motivo do cancelamento é obrigatório.', 'error')
+        return redirect(url_for('instrutor_bp.minhas_reservas'))
+
+    try:
+        db = get_db()
+        with db.cursor() as cursor:
+            cursor.execute("""
+                UPDATE reserva 
+                SET status_res = 'Cancelado', motivo_cancelamento = %s 
+                WHERE id_res = %s
+            """, (motivo, id_res))
+            db.commit()
+        flash('Reserva cancelada com sucesso.', 'success')
+    except Exception as e:
+        flash(f'Erro ao cancelar reserva: {e}', 'error')
+
+    return redirect(url_for('instrutor_bp.minhas_reservas'))
+
+@instrutor_bp.route('/cancelar_reserva', methods=['POST'])
+@login_required
+@role_required(['Instrutor', 'Administrador'])
+def cancelar_reserva():
+    id_reserva = request.form.get('id_reserva')
+    motivo = request.form.get('motivo')
+    
+    db = get_db()
+    try:
+        with db.cursor() as cursor:
+            cursor.execute("""
+                UPDATE reserva
+                SET status_res = 'Cancelado', motivo_cancelamento = %s
+                WHERE id_res = %s
+            """, (motivo, id_reserva))
+            db.commit()
+            flash('Reserva cancelada com sucesso.', 'success')
+    except Exception as e:
+        flash(f'Erro ao cancelar reserva: {str(e)}', 'danger')
+
+    return redirect(url_for('instrutor_bp.minhas_reservas'))
