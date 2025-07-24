@@ -18,8 +18,8 @@ def annotate(rel_path, filename):
 
     if filename == "gerar_estrutura.py":
         return "← Gera estrutura de diretórios (essa aqui)"
-    elif filename == "":
-        return "← "
+    elif filename == "coordenador/__init__.py":
+        return "← esses arquivos aqui"
     return ""
 
 # Monta a árvore com indentação e comentários
