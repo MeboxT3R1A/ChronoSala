@@ -1,209 +1,143 @@
 /* static/css/base.css */
+@import 'variables.css';
 
-:root {
-    /* Cores principais Senac */
-    --azul-senac: #004A8D;
-    --laranja-senac: #F7941D;
-    --laranja-claro: #FDC180; /* Para destaques mais sutis ou interações */
-
-    /* Tons de cinza para texto e elementos neutros */
-    --cor-texto-principal: #333333;
-    --cor-texto-secundario: #555555;
-    --cor-borda-neutra: #e0e0e0;
-    --cor-fundo-neutro: #f8f9fa; /* Um cinza bem claro para o fundo */
-
-    /* Cores de feedback/status */
-    --cor-sucesso: #28a745; /* Verde */
-    --cor-erro: #dc3545; /* Vermelho */
-    --cor-info: #17a2b8; /* Azul claro */
-    --cor-aviso: #ffc107; /* Amarelo */
-
-    /* Cores para interação */
-    --cor-link: var(--azul-senac);
-    --cor-link-hover: #003a6e; /* Azul Senac mais escuro */
-    --cor-botao-primario: var(--laranja-senac);
-    --cor-botao-primario-hover: #e67e00; /* Laranja Senac mais escuro */
-
-    /* Tipografia */
-    --fonte-familia-principal: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    --fonte-tamanho-base: 16px;
-    --fonte-tamanho-pequeno: 0.875rem; /* 14px */
-    --fonte-tamanho-medio: 1rem; /* 16px */
-    --fonte-tamanho-grande: 1.125rem; /* 18px */
-
-    /* Títulos */
-    --fonte-tamanho-h1: 2.5rem; /* 40px */
-    --fonte-tamanho-h2: 2rem; /* 32px */
-    --fonte-tamanho-h3: 1.75rem; /* 28px */
-    --fonte-tamanho-h4: 1.5rem; /* 24px */
-
-    /* Espaçamentos e dimensões */
-    --espacamento-xs: 0.5rem; /* 8px */
-    --espacamento-sm: 1rem; /* 16px */
-    --espacamento-md: 1.5rem; /* 24px */
-    --espacamento-lg: 2rem; /* 32px */
-    --espacamento-xl: 3rem; /* 48px */
-
-    --borda-raio-padrao: 8px;
-    --transicao-padrao: all 0.3s ease;
-    --sombra-leve: 0 2px 10px rgba(0, 0, 0, 0.08); /* Sombra mais sutil */
-    --sombra-media: 0 5px 20px rgba(0, 0, 0, 0.1); /* Para elementos em destaque */
+/* Reset e estilos globais */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Reset Básico e Estilos Globais */
-*, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-    display: flex;
-    flex-direction: column; /* Coloca header e main em coluna */
-    min-height: 100vh; /* Garante que o body ocupa a altura total da viewport */
-    position: relative;
-    font-family: var(--fonte-familia-principal);
-    font-size: var(--fonte-tamanho-base);
-    line-height: 1.6;
-    color: var(--cor-texto-principal);
-    background-color: var(--cor-fundo-neutro);
-    -webkit-font-smoothing: antialiased; /* Para melhor renderização de fontes */
-    text-rendering: optimizeLegibility;
+  font-family: var(--fonte-familia);
+  font-size: var(--fonte-tamanho-base);
+  line-height: 1.5;
+  color: var(--cor-texto-principal);
+  background-color: var(--cor-fundo-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Links */
-a {
-    color: var(--cor-link);
-    text-decoration: none;
-    transition: var(--transicao-padrao);
-}
-
-a:hover {
-    color: var(--cor-link-hover);
-    text-decoration: underline;
-}
-
-/* Listas */
-ul {
-    list-style: none;
-}
-
-/* Títulos */
+/* Tipografia */
 h1, h2, h3, h4, h5, h6 {
-    color: var(--azul-senac);
-    margin-bottom: var(--espacamento-sm);
-    line-height: 1.2;
+  color: var(--azul-senac);
+  margin-bottom: var(--espacamento-md);
+  line-height: 1.2;
+  font-weight: 600;
 }
 
 h1 { font-size: var(--fonte-tamanho-h1); }
 h2 { font-size: var(--fonte-tamanho-h2); }
 h3 { font-size: var(--fonte-tamanho-h3); }
 h4 { font-size: var(--fonte-tamanho-h4); }
-h5 { font-size: var(--fonte-tamanho-medio); }
-h6 { font-size: var(--fonte-tamanho-pequeno); }
+h5 { font-size: var(--fonte-tamanho-lg); }
+h6 { font-size: var(--fonte-tamanho-md); }
 
-/* Elementos de Formulário Base */
-input[type="text"],
-input[type="password"],
-input[type="email"],
-input[type="number"],
+p {
+  margin-bottom: var(--espacamento-md);
+}
+
+/* Links */
+a {
+  color: var(--cor-link);
+  text-decoration: none;
+  transition: var(--transicao-padrao);
+}
+
+a:hover {
+  color: var(--cor-link-hover);
+  text-decoration: underline;
+}
+
+/* Listas */
+ul, ol {
+  margin-bottom: var(--espacamento-md);
+  padding-left: var(--espacamento-lg);
+}
+
+/* Imagens */
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+/* Formulários */
+input,
 select,
-textarea {
-    width: 100%;
-    padding: var(--espacamento-xs) var(--espacamento-sm);
-    border: 1px solid var(--cor-borda-neutra);
-    border-radius: var(--borda-raio-padrao);
-    font-size: var(--fonte-tamanho-medio);
-    color: var(--cor-texto-principal);
-    background-color: #fff;
-    transition: var(--transicao-padrao);
-    outline: none; /* Remove o outline padrão do navegador */
+textarea,
+button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-input[type="number"]:focus,
-select:focus,
-textarea:focus {
-    border-color: var(--azul-senac);
-    box-shadow: 0 0 0 3px rgba(var(--azul-senac), 0.2);
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  cursor: pointer;
 }
 
-/* Botões base */
-button, .button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--espacamento-xs) var(--espacamento-md);
-    border: none;
-    border-radius: var(--borda-raio-padrao);
-    font-size: var(--fonte-tamanho-medio);
-    cursor: pointer;
-    transition: var(--transicao-padrao);
-    text-decoration: none; /* Para usar em elementos <a> */
-    white-space: nowrap; /* Impede que o texto do botão quebre */
+/* Containers */
+.container {
+  width: 100%;
+  padding-right: var(--espacamento-md);
+  padding-left: var(--espacamento-md);
+  margin-right: auto;
+  margin-left: auto;
 }
 
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Layout */
 main {
-    flex-grow: 1; /* Isto é crucial! Faz o main ocupar todo o espaço disponível */
-    padding: var(--espacamento-lg);
-    transition: margin-left var(--transicao-padrao);
-    margin-left: 0;
-    display: flex; /* Mantenha como flex para permitir alinhamento de itens internos */
-    flex-direction: column; /* Conteúdo interno do main será em coluna por padrão */
-    width: 100%; /* Garante que o main ocupe a largura total */
-}
-/* Header */
-/* Botão Primário (Laranja Senac) */
-.button-primario, .button-entrar {
-    background-color: var(--cor-botao-primario);
-    color: white;
+  flex: 1;
+  padding: var(--espacamento-xl) 0;
 }
 
-.button-primario:hover, .button-entrar:hover {
-    background-color: var(--cor-botao-primario-hover);
-    transform: translateY(-2px); /* Efeito de elevação sutil */
-    box-shadow: 0 4px 8px rgba(var(--cor-botao-primario), 0.2);
-}
+/* Utilidades */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
 
-/* Mensagens Flash */
-.flash-messages {
-    margin-bottom: var(--espacamento-md);
-    padding: 0;
-}
+.mt-0 { margin-top: 0 !important; }
+.mb-0 { margin-bottom: 0 !important; }
+.ml-0 { margin-left: 0 !important; }
+.mr-0 { margin-right: 0 !important; }
 
-.flash-messages li {
-    padding: var(--espacamento-xs) var(--espacamento-sm);
-    margin-bottom: var(--espacamento-xs);
-    border-radius: var(--borda-raio-padrao);
-    font-size: var(--fonte-tamanho-pequeno);
-    border: 1px solid transparent;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.flash-messages .success {
-    background-color: #d4edda; /* Verde claro */
-    color: var(--cor-sucesso);
-    border-color: #c3e6cb;
-}
-
-.flash-messages .error {
-    background-color: #f8d7da; /* Vermelho claro */
-    color: var(--cor-erro);
-    border-color: #f5c6cb;
-}
-
-.flash-messages .info {
-    background-color: #d1ecf1; /* Azul claro */
-    color: var(--cor-info);
-    border-color: #bee5eb;
-}
-
-.flash-messages .warning {
-    background-color: #fff3cd; /* Amarelo claro */
-    color: var(--cor-aviso);
-    border-color: #ffeeba;
-}
+.pt-0 { padding-top: 0 !important; }
+.pb-0 { padding-bottom: 0 !important; }
+.pl-0 { padding-left: 0 !important; }
+.pr-0 { padding-right: 0 !important; }

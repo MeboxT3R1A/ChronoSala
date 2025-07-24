@@ -1,46 +1,70 @@
-{# templates/coordenador/cadastro_usuario.html #}
 {% extends 'base/base.html' %}
 
-{% block title %}Cadastro Usuario{% endblock %}
+{% block title %}Cadastro de Usuário{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
+{% endblock %}
 
 {% block content %}
+<div class="container-coordenador">
+    <div class="card">
+        <h1 class="form-title"><i class="fas fa-user-plus"></i> Cadastro de Usuário</h1>
 
-{% block styles %}
-{% block style %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
-{% endblock %}
-{% endblock %}
-<h1 style="margin-bottom: 20px;">Painel Cadastro Usuario</h1>
+        <form action="{{ url_for('coordenador_bp.cadastro_usuario') }}" method="POST" class="user-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" maxlength="60" class="form-control" required
+                       placeholder="exemplo@dominio.com">
+            </div>
 
-<form action="{{ url_for('coordenador_bp.cadastro_usuario') }}" method="POST" style="max-width: 400px;">
-    <label for="email">Email:</label><br>
-    <input type="text" id="email" name="email" maxlength="60" required
-           style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
+            <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome" maxlength="60" class="form-control" required
+                       placeholder="Digite o nome completo">
+            </div>
 
-    <label for="nome">Nome:</label><br>
-    <input type="text" id="nome" name="nome" maxlength="60" required
-           style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="matricula">Matrícula:</label>
+                    <input type="text" id="matricula" name="matricula" maxlength="5" minlength="5" 
+                           class="form-control" required placeholder="5 dígitos"
+                           pattern="[0-9]{5}" title="Digite exatamente 5 números">
+                </div>
 
-    <label for="matricula">Matrícula (5 caracteres):</label><br>
-    <input type="text" id="matricula" name="matricula" maxlength="5" minlength="5" required
-           style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
+                <div class="form-group">
+                    <label for="funcao">Função:</label>
+                    <select name="funcao" id="funcao" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        <option value="Coordenador">Coordenador</option>
+                        <option value="Instrutor">Instrutor</option>
+                        <option value="Administrador">Administrador</option>
+                    </select>
+                </div>
+            </div>
 
-    <label for="senha">Senha (máx 11):</label><br>
-    <input type="password" id="senha" name="senha" maxlength="11" required
-           style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc;"><br>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <div class="password-container">
+                    <input type="password" id="senha" name="senha" maxlength="11" class="form-control" required
+                           placeholder="Máximo 11 caracteres">
+                    <button type="button" class="btn-toggle-password" aria-label="Mostrar senha">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
 
-    <label for="funcao">Função:</label><br>
-    <select name="funcao" id="funcao" required
-            style="width: 70%; padding: 6px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ccc;">
-        <option value="">Selecione...</option>
-        <option value="Coordenador">Coordenador</option>
-        <option value="Instrutor">Instrutor</option>
-        <option value="Administrador">Administrador</option>
-    </select><br>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Cadastrar
+                </button>
+                <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="btn btn-secondary">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 
-    <input type="submit" value="Cadastrar"
-           style="padding: 10px 20px; border-radius: 8px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
-</form>
+<script src="{{ url_for('static', filename='js/coordenador.js') }}"></script>
 {% endblock %}

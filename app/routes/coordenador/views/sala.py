@@ -66,3 +66,26 @@ def excluir_sala(nome_sala):
 
     return redirect(url_for('coordenador_bp.painel_coordenador'))
 
+@coordenador.route('/adicionar_sala', methods=['POST'])
+@login_required
+@role_required(['Coordenador'])
+def adicionar_sala():
+    """Rota para adicionar nova sala"""
+    try:
+        nome_sala = request.form['nome_sala']
+        status_sala = request.form['status_sala']
+        
+        conn = get_db()
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO sala (nome_sala, status_sala) VALUES (%s, %s)",
+                (nome_sala, status_sala)
+            )
+            conn.commit()
+            flash('Sala adicionada com sucesso!', 'success')
+    except pymysql.err.IntegrityError:
+        flash('Esta sala já existe!', 'error')
+    except Exception as e:
+        flash(f'Erro ao adicionar sala: {str(e)}', 'error')
+    
+    return redirect(url_for('coordenador_bp.painel_coordenador'))   

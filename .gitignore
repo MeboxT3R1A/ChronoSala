@@ -1,10 +1,7 @@
-venv/
 __pycache__/
+venv/
 *.pyc
 .env
 *.db
-.venv/
-teste.txt
-texto.txt
 .vscode/
 .venv/

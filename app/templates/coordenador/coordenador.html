@@ -1,100 +1,113 @@
-{# templates/coordenador/coordenador.html #}
-{% extends 'base/base.html' %}
+    {% extends 'base/base.html' %}
 
-{% block title %}Painel do Coordenador{% endblock %}
+    {% block title %}Painel do Coordenador{% endblock %}
 
-{% block style %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> {# Importante para o layout base #}
+    {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
-{% endblock %}
+    {% endblock %}
 
-{% block content %}
-<h1>Painel do Coordenador</h1>
+    {% block content %}
+    <div class="container-coordenador">
+        <h1 class="page-title">Painel do Coordenador</h1>
 
-{# Agrupando os botões de ação para melhor layout com CSS #}
-<div class="painel-acoes">
-    <button type="button" class="button-primario" onclick="abrirModal()">+ Nova Sala</button>
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="abrirModalBtn">
+                <i class="fas fa-plus"></i> Nova Sala
+            </button>
+            <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="btn btn-secondary">
+                <i class="fas fa-users"></i> Funcionários
+            </a>
+            <a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="btn btn-secondary">
+                <i class="fas fa-calendar-alt"></i> Reservas
+            </a>
+        </div>
 
-    <a href="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="button-secundario">
-        Painel Funcionários
-    </a>
-    <a href="{{ url_for('coordenador_bp.listar_reservas') }}" class="button-secundario">
-        Painel Reserva
-    </a>
-</div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="alerts">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul class="flash-messages">
-      {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+        {% if salas %}
+        <div class="table-responsive">
+            <table class="table-salas">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sala in salas %}
+                    <tr>
+                        <td>{{ sala.nome_sala }}</td>
+                        <td>
+                            <span class="status-badge status-{{ sala.status_sala|lower|replace(' ', '-') }}">
+                                {{ sala.status_sala or 'N/A' }}
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <a href="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" 
+                            class="btn-action btn-edit">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" 
+                                method="POST" 
+                                class="form-delete"
+                                onsubmit="return confirm('Tem certeza que deseja excluir esta sala?');">
+                                <button type="submit" class="btn-action btn-delete">
+                                    <i class="fas fa-trash-alt"></i> Excluir
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>Nenhuma sala cadastrada ainda.</p>
+        </div>
+        {% endif %}
 
-{# Tabela #}
-<div class="tabela-responsiva"> {# Adiciona um wrapper para responsividade da tabela #}
-    <table class="tabela-geral"> {# Troquei o style inline para classe CSS #}
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Status</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sala in salas %}
-            <tr>
-                <td>{{ sala.nome_sala }}</td>
-                <td><span class="status-tag status-{{ sala.status_sala | lower | replace(' ', '-') }}">{{ sala.status_sala or 'N/A' }}</span></td> {# Adicionei classes para estilizar o status #}
-                <td>
-                    <div class="tabela-acoes"> {# Agrupar botões de ação na tabela #}
-                        <a href="{{ url_for('coordenador_bp.editar_sala', nome_sala=sala.nome_sala) }}" class="button-acao editar">Editar</a>
-
-                        <form action="{{ url_for('coordenador_bp.excluir_sala', nome_sala=sala.nome_sala) }}" method="POST" style="display:inline;"
-                              onsubmit="return confirm('Confirma exclusão da sala {{ sala.nome_sala }}?');">
-                            <button type="submit" class="button-acao excluir">Excluir</button>
-                        </form>
+        <div class="modal" id="modalNovaSala">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Adicionar Nova Sala</h2>
+                    <span class="modal-close">&times;</span>
+                </div>
+                
+                <form method="POST" action="{{ url_for('coordenador_bp.adicionar_sala') }}" class="modal-form">
+                    <div class="form-group">
+                        <label for="nomeSala">Nome da Sala*</label>
+                        <input type="text" id="nomeSala" name="nome_sala" required 
+                            placeholder="Ex: Laboratório 1" class="form-control">
                     </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-{# Modal - Classes Bootstrap já estão OK, mas adicionarei alguns estilos para customização #}
-<div class="modal fade" id="modalNovaSala" tabindex="-1" aria-labelledby="tituloModalNovaSala" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    
-      <div class="modal-header">
-        <h5 class="modal-title" id="tituloModalNovaSala">Adicionar Nova Sala</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-
-      <div class="modal-body">
-        <form id="formNovaSala">
-          <div class="mb-3">
-            <label for="nomeSala" class="form-label">Nome da Sala</label>
-            <input type="text" class="form-control" id="nomeSala" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="capacidadeSala" class="form-label">Capacidade</label>
-            <input type="number" class="form-control" id="capacidadeSala" min="0" required>
-          </div>
-
-          <div class="modal-footer">
-            {# Botões do modal agora com classes customizadas para padronizar #}
-            <button type="submit" class="button-primario">Salvar</button>
-            <button type="button" class="button-secundario" data-bs-dismiss="modal">Cancelar</button>
-          </div>
-        </form>
-      </div>
-
+                    
+                    <div class="form-group">
+                        <label for="statusSala">Status*</label>
+                        <select id="statusSala" name="status_sala" required class="form-control">
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="Disponível">Disponível</option>
+                            <option value="Ocupado">Ocupado</option>
+                            <option value="Manutenção">Em Manutenção</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-cancelar">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Sala</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/coordenador.js') }}"></script>
+    {% endblock %}
