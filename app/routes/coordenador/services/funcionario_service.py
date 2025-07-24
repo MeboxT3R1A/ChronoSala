@@ -1,7 +1,6 @@
-# app/routes/coordenador/services/funcionario_service.py
-
 from app.db import get_db
 import pymysql
+
 
 def buscar_funcionarios(busca=None, filtro_funcao=None):
     conn = get_db()
@@ -37,4 +36,14 @@ def atualizar_funcionario(email, nome, matricula, senha, funcao):
             WHERE email=%s
         """
         cursor.execute(query, (nome, matricula, senha, funcao, email))
+        conn.commit()
+
+
+def cadastrar_funcionario(email, nome, matricula, senha, funcao):
+    conn = get_db()
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            INSERT INTO funcionario (email, nome, matricula, senha, funcao)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (email, nome, matricula, senha, funcao))
         conn.commit()

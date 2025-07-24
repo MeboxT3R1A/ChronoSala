@@ -1,5 +1,3 @@
-# app/routes/coordenador/views/funcionario.py
-
 from flask import render_template, request, redirect, url_for, flash
 from app.routes.coordenador import coordenador_bp as coordenador
 from app.decorators import login_required, role_required
@@ -7,8 +5,9 @@ from app.routes.coordenador.services.funcionario_service import (
     buscar_funcionarios,
     buscar_funcionario_por_email,
     atualizar_funcionario,
+    cadastrar_funcionario,
 )
-from pymysql.err import Error
+from pymysql.err import Error, IntegrityError
 
 
 @coordenador.route('/listar_funcionarios')
@@ -21,7 +20,6 @@ def listar_funcionarios():
     try:
         funcionarios = buscar_funcionarios(busca, filtro_funcao)
         return render_template('coordenador/painel_funcionario.html', funcionarios=funcionarios)
-
     except Exception as e:
         flash(f"Erro ao buscar funcionários: {e}", "danger")
         return render_template('coordenador/painel_funcionario.html', funcionarios=[])
@@ -51,3 +49,27 @@ def editar_funcionario(email):
         return redirect(url_for('coordenador_bp.listar_funcionarios'))
 
     return render_template('coordenador/editar_funcionario.html', funcionario=funcionario)
+
+
+@coordenador.route('/cadastro_usuario', methods=['GET', 'POST'])
+@login_required
+@role_required(['Coordenador'])
+def cadastro_usuario():
+    if request.method == 'POST':
+        email = request.form['email']
+        nome = request.form['nome']
+        matricula = request.form['matricula']
+        senha = request.form['senha']
+        funcao = request.form['funcao']
+
+        try:
+            cadastrar_funcionario(email, nome, matricula, senha, funcao)
+            flash('Funcionário cadastrado com sucesso!', 'success')
+        except IntegrityError:
+            flash('Funcionário já cadastrado!', 'warning')
+        except Exception as err:
+            flash(f'Erro ao cadastrar funcionário: {err}', 'danger')
+
+        return redirect(url_for('coordenador.cadastro_usuario'))
+
+    return render_template('coordenador/cadastro_usuario.html')

@@ -5,7 +5,7 @@ import pymysql
 
 def buscar_reservas(nome_sala, data_res, busca, conn):
     with conn.cursor(pymysql.cursors.DictCursor) as cursor:
-        query = "SELECT id_res, nome_sala, email, inicio, termino, data_res, status_res, status_chave FROM reserva"
+        query = "SELECT * FROM reserva"
         filtros = []
         valores = []
 
@@ -41,7 +41,7 @@ def extrair_filtros_request():
 def buscar_reservas_filtradas(nome_sala=None, data_res=None, busca=None):
     conn = get_db()
     with conn.cursor(pymysql.cursors.DictCursor) as cursor:
-        query = "SELECT id_res, nome_sala, email, inicio, termino, data_res, status_res, status_chave FROM reserva"
+        query = "SELECT * FROM reserva"
         filtros = []
         valores = []
 
