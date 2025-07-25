@@ -1,27 +1,65 @@
-{% extends 'base/index.html' %}
+<!-- templates/instrutor/criar_reserva.html -->
+{% extends 'base/base.html' %}
 
-{% block title %}Nova Reserva{% endblock %}
+{% block title %}Criar Reserva{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/instrutor.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
 
 {% block content %}
-<!-- templates/instrutor/reserva_form.html -->
-<h2>Nova Reserva para a Sala: {{ nome_sala }}</h2>
+<div class="container-coordenador">
+    <div class="card">
+        <h2 class="form-title"><i class="fas fa-calendar-plus"></i> Nova Reserva</h2>
+        
+        <form method="POST" class="form-reserva" action="{{ url_for('instrutor_bp.criar_reserva') }}">
+            <div class="form-group">
+                <label for="nome_sala">Sala:</label>
+                <select name="nome_sala" id="nome_sala" class="form-control" required>
+                    <option value="">Selecione uma sala</option>
+                    {% for sala in salas %}
+                    <option value="{{ sala.nome_sala }}">{{ sala.nome_sala }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-<form method="post">
-    <input type="hidden" name="nome_sala" value="{{ nome_sala }}">
+            <div class="form-group">
+                <label for="responsavel">Seu e-mail:</label>
+                <input type="email" name="responsavel" id="responsavel" class="form-control" value="{{ session.get('user_email', '') }}" required>
+            </div>
 
-    <label>Data da Reserva:</label>
-    <input type="date" name="data_res" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="data_reserva">Data:</label>
+                    <input type="text" name="data_reserva" id="data_reserva" class="form-control datepicker" placeholder="DD/MM/AAAA" required>
+                </div>
+                <div class="form-group">
+                    <label for="hora_inicio">Início:</label>
+                    <input type="text" name="hora_inicio" id="hora_inicio" class="form-control timepicker" placeholder="HH:MM" required>
+                </div>
+                <div class="form-group">
+                    <label for="hora_fim">Término:</label>
+                    <input type="text" name="hora_fim" id="hora_fim" class="form-control timepicker" placeholder="HH:MM" required>
+                </div>
+            </div>
 
-    <label>Hora de Início:</label>
-    <input type="time" name="hora_inicio" required>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Reservar
+                </button>
+                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}" class="btn btn-cancelar">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 
-    <label>Hora de Término:</label>
-    <input type="time" name="hora_fim" required>
-
-    <label>Responsável:</label>
-    <input type="text" name="responsavel" required>
-
-    <button type="submit">Confirmar Reserva</button>
-</form>
-
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+<script>
+    flatpickr(".datepicker", { dateFormat: "d/m/Y", locale: "pt" });
+    flatpickr(".timepicker", { enableTime: true, noCalendar: true, dateFormat: "H:i" });
+</script>
 {% endblock %}

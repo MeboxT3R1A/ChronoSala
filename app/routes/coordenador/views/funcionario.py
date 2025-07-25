@@ -70,6 +70,6 @@ def cadastro_usuario():
         except Exception as err:
             flash(f'Erro ao cadastrar funcionário: {err}', 'danger')
 
-        return redirect(url_for('coordenador.cadastro_usuario'))
+        return redirect(url_for('coordenador_bp.cadastro_usuario'))
 
     return render_template('coordenador/cadastro_usuario.html')

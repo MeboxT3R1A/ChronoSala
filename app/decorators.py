@@ -1,6 +1,6 @@
 # app/decorators.py
 from functools import wraps
-from flask import session, flash, redirect, url_for
+from flask import session, flash, redirect, url_for, abort
 
 def login_required(f):
     """
@@ -36,10 +36,8 @@ def role_required(allowed_roles):
 
             if session.get('user_role') not in allowed_roles:
                 print(f"ACESSO NEGADO: {session.get('user_role')} não está em {allowed_roles}")
-                flash('Você não tem permissão para acessar esta página.', 'danger')
-
-                # Redireciona para uma página que *não* faz outro redirect automático
-                return redirect(url_for('login_bp.login'))  # TEMPORÁRIO para quebrar o loop # Redireciona para uma página genérica ou de erro
+                abort(403)
+                
             return f(*args, **kwargs)
         return decorated_function
     return decorator

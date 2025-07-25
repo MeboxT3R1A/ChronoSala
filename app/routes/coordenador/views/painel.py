@@ -5,7 +5,7 @@ from app.decorators import login_required, role_required
 from app.routes.coordenador import coordenador_bp as coordenador
 from app.routes.coordenador.services.coordenador_service import buscar_salas
 
-@coordenador.route('/')
+@coordenador.route('')
 @login_required
 @role_required(['Coordenador'])
 def painel_coordenador():

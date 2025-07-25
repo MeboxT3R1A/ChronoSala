@@ -19,7 +19,7 @@
                 <select name="nome_sala" id="nome_sala" class="form-control" required>
                     <option value="">Selecione uma sala</option>
                     {% for sala in salas %}
-                    <option value="{{ sala }}">{{ sala }}</option>
+                    <option value="{{ sala }}">{{ sala.nome_sala }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -31,8 +31,8 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="data_res">Data da reserva:</label>
-                    <input type="text" name="data_res" id="data_res" class="form-control datepicker" 
+                    <label for="data_reserva">Data da reserva:</label>
+                    <input type="text" name="data_reserva" id="data_res" class="form-control datepicker" 
                            placeholder="DD/MM/AAAA" required>
                 </div>
                 

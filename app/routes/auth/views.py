@@ -5,7 +5,7 @@ from . import login_bp
 from app.routes.auth.services.auth_service import autenticar_login
 from app.routes.auth.services.session_manager import salvar_sessao, destino_por_funcao
 
-@login_bp.route('/', methods=['GET', 'POST'])
+@login_bp.route('', methods=['GET', 'POST'])
 def login():
     usuario_preenchido = ''
     if request.method == 'POST':

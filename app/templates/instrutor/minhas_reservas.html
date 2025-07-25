@@ -1,11 +1,9 @@
-{% extends 'base/index.html' %}
-
+<!-- templates/instrutor/minhas_reservas.html -->
+{% extends 'base/base.html' %}
 {% block content %}
 <h2>Minhas Reservas</h2>
-
-{% if reservas %}
-<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%">
-  <thead style="background-color: #eee">
+<table class="table table-striped">
+  <thead>
     <tr>
       <th>Sala</th>
       <th>Data</th>
@@ -19,18 +17,13 @@
     {% for reserva in reservas %}
     <tr>
       <td>{{ reserva.nome_sala }}</td>
-      <td>{{ reserva.data_res.strftime('%d/%m/%Y') if reserva.data_res else '' }}</td>
-      <td>{{ reserva.inicio.strftime('%H:%M') if reserva.inicio else '' }}</td>
-      <td>{{ reserva.termino.strftime('%H:%M') if reserva.termino else '' }}</td>
-      <td>{{ reserva.status_res }}</td>
-      <td style="text-align: center;">
-        {% if reserva.status_res|lower|trim == 'reservado' %}
-        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelarModal"
-          data-id="{{ reserva.id_res }}">
-          Cancelar
-        </button>
-        {% else %}
-        -
+      <td>{{ reserva.data_reserva }}</td>
+      <td>{{ reserva.hora_inicio }}</td>
+      <td>{{ reserva.hora_fim }}</td>
+      <td>{{ reserva.status_reserva }}</td>
+      <td>
+        {% if reserva.status_reserva == 'reservado' %}
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelarModal" data-id="{{ reserva.id_res }}">Cancelar</button>
         {% endif %}
       </td>
     </tr>
@@ -38,25 +31,34 @@
   </tbody>
 </table>
 
-<!-- Modal -->
-<div class="modal fade" id="cancelarModal" tabindex="-1" aria-labelledby="cancelarModalLabel" aria-hidden="true">
+<!-- Modal Cancelar -->
+<div class="modal fade" id="cancelarModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-    <form method="POST" action="{{ url_for('instrutor_bp.cancelar_reserva') }}">
-      <div class="modal-content">
+    <div class="modal-content">
+      <form method="POST" action="{{ url_for('instrutor_bp.cancelar_reserva') }}">
         <div class="modal-header">
-          <h5 class="modal-title" id="cancelarModalLabel">Cancelar Reserva</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          <h5 class="modal-title">Confirmar Cancelamento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
+          <p>Deseja cancelar esta reserva?</p>
           <input type="hidden" name="id_reserva" id="modal-id-reserva">
-          <label for="motivo">Motivo do cancelamento:</label>
-          <textarea class="form-control" name="motivo" id="motivo" rows="3" required></textarea>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="submit" class="btn btn-danger">Confirmar Cancelamento</button>
+          <button type="submit" class="btn btn-danger">Cancelar</button>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div
+</div>
+
+<script>
+  const cancelarModal = document.getElementById('cancelarModal');
+  cancelarModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const id = button.getAttribute('data-id');
+    document.getElementById('modal-id-reserva').value = id;
+  });
+</script>
+{% endblock %}

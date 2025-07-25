@@ -1,80 +1,38 @@
-# app/routes/instrutor/views.py
-from flask import render_template, request, redirect, url_for, flash, session, jsonify
-from app.db import get_db
+from flask import render_template, request, session
 from app.routes.instrutor import instrutor_bp as instrutor
-import pymysql.cursors
-from datetime import datetime
 from app.decorators import login_required, role_required
+from app.routes.instrutor.services.instrutor_services import obter_salas_com_reservas
+from app.routes.instrutor.services.reserva_services import processar_reserva
 
-@instrutor.route('/')
+@instrutor.route('')
 @login_required
 @role_required(['Instrutor', 'Administrador'])
 def painel_instrutor():
     try:
-        conn = get_db()
-        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
-            cursor.execute("SELECT * FROM sala")
-            salas = cursor.fetchall()
-
-            for sala in salas:
-                cursor.execute("SELECT * FROM reserva WHERE nome_sala = %s", (sala['nome_sala'],))
-                sala['reservas'] = cursor.fetchall()
-
+        salas = obter_salas_com_reservas()
         return render_template('instrutor/painel_instrutor.html', salas=salas)
-
     except Exception as e:
         print("Erro ao carregar painel do instrutor:", e)
         return f"Erro: {e}"
 
-@instrutor.route('/reservar', methods=['POST'])
+@instrutor.route('/reservar', methods=['GET', 'POST'])
 @login_required
 @role_required(['Instrutor', 'Administrador'])
 def criar_reserva():
+    if request.method == 'POST':
+        dados_reserva = {
+            'nome_sala': request.form['nome_sala'],
+            'data_reserva': request.form['data_reserva'],
+            'hora_inicio': request.form['hora_inicio'],
+            'hora_fim': request.form['hora_fim'],
+            'responsavel': request.form['responsavel']
+        }
+        return processar_reserva(dados_reserva)
+    
+    # GET
     try:
-        nome_sala = request.form['nome_sala']
-        data_reserva = request.form['data_reserva']
-        hora_inicio = request.form['hora_inicio']
-        hora_fim = request.form['hora_fim']
-        responsavel = request.form['responsavel']
-
-        data = datetime.strptime(data_reserva, '%Y-%m-%d').date()
-        inicio = datetime.strptime(hora_inicio, '%H:%M').time()
-        fim = datetime.strptime(hora_fim, '%H:%M').time()
-
-        if fim <= inicio:
-            return jsonify({'success': False, 'message': 'Hora final deve ser após a inicial'})
-
-        conn = get_db()
-        with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
-            # Verifica conflito
-            cursor.execute("""
-                SELECT * FROM reserva 
-                WHERE nome_sala = %s AND data_reserva = %s AND (
-                    (hora_inicio <= %s AND hora_fim > %s) OR
-                    (hora_inicio < %s AND hora_fim >= %s) OR
-                    (hora_inicio >= %s AND hora_fim <= %s)
-                )
-            """, (nome_sala, data_reserva, hora_inicio, hora_inicio, hora_fim, hora_fim, hora_inicio, hora_fim))
-
-            if cursor.fetchone():
-                return jsonify({'success': False, 'message': 'Conflito com outra reserva!'})
-
-            # Cria reserva
-            cursor.execute("""
-                INSERT INTO reserva (nome_sala, data_reserva, hora_inicio, hora_fim, responsavel)
-                VALUES (%s, %s, %s, %s, %s)
-            """, (nome_sala, data_reserva, hora_inicio, hora_fim, responsavel))
-
-            # Atualiza status da sala
-            cursor.execute("UPDATE sala SET status_sala = 'ocupada' WHERE nome_sala = %s", (nome_sala,))
-            conn.commit()
-
-        return jsonify({'success': True, 'message': 'Reserva criada com sucesso!'})
-
+        salas = obter_salas_com_reservas()
+        return render_template('instrutor/reserva_form.html', salas=salas)
     except Exception as e:
-        import traceback
-        print("Erro na reserva:\n", traceback.format_exc())
-        return jsonify({
-            'success': False,
-            'message': f'Erro interno: {str(e)}'
-        })
+        print("Erro ao carregar formulário de reserva:", e)
+        return f"Erro ao carregar formulário: {e}"
