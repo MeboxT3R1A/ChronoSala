@@ -21,7 +21,6 @@ def processar_reserva(dados):
 
         conn = get_db()
         with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
-
             cursor.execute("SELECT id_sala FROM sala WHERE nome_sala = %s", (nome_sala,))
             sala = cursor.fetchone()
             if not sala:
@@ -59,3 +58,32 @@ def processar_reserva(dados):
         print("Erro na lógica de reserva:\n", traceback.format_exc())
         flash(f'Erro interno: {str(e)}', 'error')
         return redirect(url_for('instrutor_bp.exibir_form_reserva'))
+
+
+def buscar_reservas_por_email(email):
+    conn = get_db()
+    with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
+        cursor.execute("""
+            SELECT r.id_res, s.nome_sala, r.data_res AS data_reserva,
+                   r.inicio AS hora_inicio, r.termino AS hora_fim,
+                   r.status_res AS status_reserva
+            FROM reserva r
+            JOIN sala s ON r.id_sala = s.id_sala
+            WHERE r.email = %s
+            ORDER BY r.data_res DESC, r.inicio
+        """, (email,))
+        return cursor.fetchall()
+
+
+def atualizar_status_reserva(id_reserva, novo_status):
+    conn = get_db()
+    with conn.cursor() as cursor:
+        cursor.execute("UPDATE reserva SET status_res = %s WHERE id_res = %s", (novo_status, id_reserva))
+        conn.commit()
+
+def buscar_sala_por_id(id_sala):
+    conn = get_db()
+    with conn.cursor(cursor=pymysql.cursors.DictCursor) as cursor:
+        cursor.execute("SELECT * FROM sala WHERE id_sala = %s", (id_sala,))
+        sala = cursor.fetchone()
+    return sala

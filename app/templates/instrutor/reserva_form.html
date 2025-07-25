@@ -16,17 +16,23 @@
         <form method="POST" class="form-reserva" action="{{ url_for('instrutor_bp.criar_reserva') }}">
             <div class="form-group">
                 <label for="nome_sala">Sala:</label>
-                <select name="nome_sala" id="nome_sala" class="form-control" required>
-                    <option value="">Selecione uma sala</option>
-                    {% for sala in salas %}
-                    <option value="{{ sala.nome_sala }}">{{ sala.nome_sala }}</option>
-                    {% endfor %}
-                </select>
+                {% if sala %}
+                    <input type="text" class="form-control" value="{{ sala.nome_sala }}" readonly>
+                    <input type="hidden" name="nome_sala" value="{{ sala.nome_sala }}">
+                {% else %}
+                    <select name="nome_sala" id="nome_sala" class="form-control" required>
+                        <option value="">Selecione uma sala</option>
+                        {% for s in salas %}
+                            <option value="{{ s.nome_sala }}">{{ s.nome_sala }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
             </div>
-
+        
             <div class="form-group">
                 <label for="responsavel">Seu e-mail:</label>
-                <input type="email" name="responsavel" id="responsavel" class="form-control" value="{{ session.get('user_email', '') }}" required>
+                <input type="text" class="form-control" value="{{ session.get('user_email') }}" readonly>
+                <input type="hidden" name="responsavel" value="{{ session.get('user_email') }}">
             </div>
 
             <div class="form-row">
