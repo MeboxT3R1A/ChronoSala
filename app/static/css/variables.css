@@ -1,0 +1,95 @@
+/* static/css/variables.css */
+:root {
+  /* Cores */
+  --azul-senac: #004A8D;
+  --laranja-senac: #F7941D;
+  --laranja-claro: #FDC180;
+  --branco: #ffffff;
+  
+  /* Tons de cinza */
+  --cinza-100: #f8f9fa;
+  --cinza-200: #e9ecef;
+  --cinza-300: #dee2e6;
+  --cinza-400: #ced4da;
+  --cinza-500: #adb5bd;
+  --cinza-600: #6c757d;
+  --cinza-700: #495057;
+  --cinza-800: #343a40;
+  --cinza-900: #212529;
+  
+  /* Cores semânticas */
+  --cor-sucesso: #28a745;
+  --cor-erro: #dc3545;
+  --cor-info: #17a2b8;
+  --cor-inform-2: #097282;
+  --cor-aviso: #ffc107;
+  --cor-perigo: #fd7e14;
+  
+  /* Cores de texto */
+  --cor-texto-principal: var(--cinza-900);
+  --cor-texto-secundario: var(--cinza-700);
+  --cor-texto-terciario: var(--cinza-600);
+  
+  /* Cores de fundo */
+  --cor-fundo-body: var(--cinza-100);
+  --cor-fundo-cartao: var(--branco);
+  --cor-fundo-header: var(--azul-senac);
+  --cor-fundo-footer: var(--cinza-800);
+  
+  /* Cores de borda */
+  --cor-borda: var(--cinza-300);
+  --cor-borda-foco: var(--azul-senac);
+  
+  /* Tipografia */
+  --fonte-familia: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+                   'Helvetica Neue', Arial, sans-serif;
+  --fonte-tamanho-base: 16px;
+  
+  /* Escala de tamanhos */
+  --fonte-tamanho-xs: 0.75rem;    /* 12px */
+  --fonte-tamanho-sm: 0.875rem;   /* 14px */
+  --fonte-tamanho-md: 1rem;       /* 16px */
+  --fonte-tamanho-lg: 1.125rem;   /* 18px */
+  --fonte-tamanho-xl: 1.25rem;    /* 20px */
+  --fonte-tamanho-xxl: 1.5rem;    /* 24px */
+  
+  /* Títulos */
+  --fonte-tamanho-h1: 2.5rem;     /* 40px */
+  --fonte-tamanho-h2: 2rem;       /* 32px */
+  --fonte-tamanho-h3: 1.75rem;    /* 28px */
+  --fonte-tamanho-h4: 1.5rem;     /* 24px */
+  
+  /* Espaçamentos */
+  --espacamento-xs: 0.25rem;      /* 4px */
+  --espacamento-sm: 0.5rem;       /* 8px */
+  --espacamento-md: 1rem;         /* 16px */
+  --espacamento-lg: 1.5rem;       /* 24px */
+  --espacamento-xl: 2rem;         /* 32px */
+  --espacamento-xxl: 3rem;        /* 48px */
+  
+  /* Bordas */
+  --borda-raio-sm: 4px;
+  --borda-raio-md: 8px;
+  --borda-raio-lg: 12px;
+  --borda-raio-xl: 16px;
+  --borda-raio-pill: 9999px;
+  
+  /* Sombras */
+  --sombra-xs: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --sombra-sm: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --sombra-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --sombra-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+  
+  /* Transições */
+  --transicao-rapida: all 0.15s ease;
+  --transicao-padrao: all 0.3s ease;
+  --transicao-lenta: all 0.5s ease;
+  
+  /* Z-index */
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal: 1050;
+  --z-index-popover: 1070;
+  --z-index-tooltip: 1080;
+}

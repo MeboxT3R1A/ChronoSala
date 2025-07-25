@@ -1,51 +1,79 @@
-{# templates/coordenador/painel_funcionario.html #}
 {% extends 'base/base.html' %}
 
 {% block title %}Funcionários Cadastrados{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
+{% endblock %}
+
 {% block content %}
-<h1>Funcionários Cadastrados</h1>
-<a href="{{ url_for('coordenador_bp.cadastro_usuario') }}">
-    <button type="button">Cadastro Usuário</button>
-</a>
-<form method="GET" action="{{ url_for('coordenador_bp.listar_funcionarios') }}" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
-    <input type="text" name="busca" placeholder="Buscar por nome ou matrícula" value="{{ request.args.get('busca', '') }}" style="width: 300px; padding: 6px;">
+<div class="container-coordenador">
+    <div class="panel-header">
+        <h1><i class="fas fa-users"></i> Funcionários Cadastrados</h1>
+        
+        <div class="action-buttons">
+            <a href="{{ url_for('coordenador_bp.cadastro_usuario') }}" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Novo Funcionário
+            </a>
+        </div>
+    </div>
 
-    <select name="filtro_funcao" style="width: 200px; padding: 6px;">
-        <option value="">Todas as funções</option>
-        <option value="coordenador" {% if request.args.get('filtro_funcao') == 'coordenador' %}selected{% endif %}>Coordenador</option>
-        <option value="instrutor" {% if request.args.get('filtro_funcao') == 'instrutor' %}selected{% endif %}>Instrutor</option>
-        <option value="administrador" {% if request.args.get('filtro_funcao') == 'administrador' %}selected{% endif %}>Administrador</option>
-    </select>
+    <div class="card">
+        <form method="GET" action="{{ url_for('coordenador_bp.listar_funcionarios') }}" class="search-form">
+            <div class="form-group">
+                <input type="text" name="busca" placeholder="Buscar por nome ou matrícula" 
+                       value="{{ request.args.get('busca', '') }}" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <select name="filtro_funcao" class="form-control">
+                    <option value="">Todas as funções</option>
+                    <option value="coordenador" {% if request.args.get('filtro_funcao') == 'coordenador' %}selected{% endif %}>Coordenador</option>
+                    <option value="instrutor" {% if request.args.get('filtro_funcao') == 'instrutor' %}selected{% endif %}>Instrutor</option>
+                    <option value="administrador" {% if request.args.get('filtro_funcao') == 'administrador' %}selected{% endif %}>Administrador</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </form>
 
-    <button type="submit" style="padding: 6px 12px;">Buscar</button>
-</form>
+        <div class="table-responsive">
+            <table class="table-salas">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Nome</th>
+                        <th>Matrícula</th>
+                        <th>Função</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for funcionario in funcionarios %}
+                    <tr>
+                        <td>{{ funcionario.email }}</td>
+                        <td>{{ funcionario.nome }}</td>
+                        <td>{{ funcionario.matricula }}</td>
+                        <td class="text-capitalize">{{ funcionario.funcao }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('coordenador_bp.editar_funcionario', email=funcionario.email) }}" 
+                               class="btn-action btn-edit">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-<table border="1" style="border-collapse: collapse; width: 100%; text-align: left;">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Nome</th>
-            <th>Matrícula</th>
-            <th>Função</th>
-            <th>Ações</th> <!-- Nova coluna -->
-        </tr>
-    </thead>
-    <tbody>
-        {% for funcionario in funcionarios %}
-        <tr>
-            <td>{{ funcionario.email }}</td>
-            <td>{{ funcionario.nome }}</td>
-            <td>{{ funcionario.matricula }}</td>
-            <td>{{ funcionario.funcao }}</td>
-            <td>
-                <a href="{{ url_for('coordenador_bp.editar_funcionario', email=funcionario.email) }}"> <button>Editar</button> </a>
-
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% if not funcionarios %}
-    <p>Nenhum funcionário cadastrado ainda.</p>
-{% endif %}
+        {% if not funcionarios %}
+        <div class="empty-state">
+            <p>Nenhum funcionário cadastrado ainda.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
