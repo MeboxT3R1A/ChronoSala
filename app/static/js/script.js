@@ -14,8 +14,10 @@ function abrirModalReserva(salaId, salaNome) {
             return;
         }
 
+        document.getElementById('modalReserva').style.display = 'block';
         document.getElementById('salaId').value = salaId;
         document.getElementById('nomeSala').textContent = salaNome;
+        document.getElementById('nomeSalaInput').value = salaNome;
 
 
         const today = new Date().toISOString().split('T')[0];
