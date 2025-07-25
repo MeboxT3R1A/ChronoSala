@@ -21,3 +21,11 @@ def close_db(e=None):
     db = g.pop('db', None)
     if db is not None:
         db.close()
+
+def execute_query(query, params=(), fetchone=False, fetchall=False):
+    db = get_db()
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    cursor.execute(query, params)
+    result = cursor.fetchone() if fetchone else cursor.fetchall() if fetchall else None
+    db.commit()
+    return result
