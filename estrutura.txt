@@ -15,20 +15,20 @@ ChronoSala/
 │   │   │   │   ├── auth_service.py
 │   │   │   │   └── session_manager.py
 │   │   │   └── views.py
-coordenador/
-├── __init__.py
-├── services/
-│   ├── __init__.py
-│   ├── coordenador_service.py
-│   ├── funcionario_service.py
-│   ├── reserva_service.py
-│   └── sala_services.py
-└── views/
-    ├── __init__.py
-    ├── funcionario.py
-    ├── painel.py
-    ├── reserva.py
-    └── sala.py
+│   │   ├── coordenador/
+│   │   │   ├── __init__.py
+│   │   │   ├── services/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── coordenador_service.py
+│   │   │   │   ├── funcionario_service.py
+│   │   │   │   ├── reserva_service.py
+│   │   │   │   └── sala_services.py
+│   │   │   └── views/
+│   │   │       ├── __init__.py
+│   │   │       ├── funcionario.py
+│   │   │       ├── painel.py
+│   │   │       ├── reserva.py
+│   │   │       └── sala.py
 │   │   ├── geral.py
 │   │   └── instrutor/
 │   │       ├── __init__.py
@@ -44,6 +44,7 @@ coordenador/
 │   │   │   └── variables.css
 │   │   └── js/
 │   │       ├── coordenador.js
+│   │       ├── instrutor.js
 │   │       ├── login.js
 │   │       ├── reserva.js
 │   │       └── script.js
@@ -63,11 +64,14 @@ coordenador/
 │   │   ├── erro/
 │   │   │   └── erro_generico.html
 │   │   └── instrutor/
-│   │       └── painel_instrutor.html
+│   │       ├── cancelar_reserva.html
+│   │       ├── instrutor.html
+│   │       ├── minhas_reservas.html
+│   │       ├── painel_instrutor.html
+│   │       └── reserva_form.html
 │   └── test/
 │       └── teste.py
 ├── config.py
-├── estrutura.txt
 ├── gerar_estrutura.py ← Gera estrutura de diretórios (essa aqui)
 ├── hasheador_senha.py
 ├── requirements.txt

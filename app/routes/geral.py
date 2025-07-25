@@ -5,15 +5,15 @@ geral_bp = Blueprint('geral_bp', __name__)
 
 @geral_bp.route('/')
 def home():
-
     if 'logged_in' in session and session['logged_in']:
         role = session.get('user_role')
         if role == 'Coordenador':
             return redirect(url_for('coordenador_bp.painel_coordenador'))
-        elif role == 'Instrutor' or role == 'Administrador':
+        elif role in ['Instrutor', 'Administrador']:
             return redirect(url_for('instrutor_bp.painel_instrutor'))
-
-    return render_template('auth/login.html')
+    
+    # Se não estiver logado, redireciona para o login
+    return redirect(url_for('login_bp.login'))
 
 @geral_bp.route('/logout')
 def logout():
