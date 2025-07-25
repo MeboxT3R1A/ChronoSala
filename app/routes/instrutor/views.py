@@ -10,7 +10,9 @@ def timedelta_to_time(td):
     minutos = (total_seconds % 3600) // 60
     segundos = total_seconds % 60
     return time(horas, minutos, segundos)
+
 import pymysql.cursors
+
 @instrutor_bp.route('/')
 @login_required
 @role_required(['Instrutor', 'Administrador'])
@@ -39,7 +41,6 @@ def formulario_reserva(sala_id):
                 flash("Sala não encontrada.", "error")
                 return redirect(url_for('instrutor_bp.painel_instrutor'))
 
-            # Passa o nome da sala para o template para mostrar no formulário
             return render_template('instrutor/reserva_form.html', sala_id=sala_id, nome_sala=sala['nome_sala'])
 
     except Exception as e:
@@ -62,15 +63,12 @@ def nova_reserva(sala_id):
                 return redirect(url_for('instrutor_bp.painel_instrutor'))
 
             if request.method == 'POST':
-                data_res = request.form.get('data_res')  # formato: YYYY-MM-DD
-                hora_inicio = request.form.get('hora_inicio')  # formato: HH:MM
+                data_res = request.form.get('data_res')
+                hora_inicio = request.form.get('hora_inicio')
                 hora_fim = request.form.get('hora_fim')
                 responsavel = request.form.get('responsavel')
                 email_usuario = session.get('email')
 
-                print("Email do usuário na sessão:", email_usuario)
-
-                # 🧠 Verificação de conflito
                 query_conflito = """
                     SELECT * FROM reserva 
                     WHERE id_sala = %s AND data_res = %s
@@ -83,7 +81,6 @@ def nova_reserva(sala_id):
                     flash("Já existe uma reserva nesse horário para essa sala.", "warning")
                     return redirect(url_for('instrutor_bp.formulario_reserva', sala_id=sala_id))
 
-                # ✅ Se não houver conflito, inserir reserva
                 cursor.execute("""
                     INSERT INTO reserva (id_sala, email, inicio, termino, data_res)
                     VALUES (%s, %s, %s, %s, %s)
@@ -93,14 +90,12 @@ def nova_reserva(sala_id):
                 flash('Reserva criada com sucesso!', 'success')
                 return redirect(url_for('instrutor_bp.painel_instrutor'))
 
-            # Se for GET, mostra o formulário com o nome da sala
             return render_template('instrutor/reserva_form.html', sala_id=sala_id, nome_sala=sala['nome_sala'])
 
     except Exception as e:
         print("Erro ao criar reserva:", e)
         flash("Erro ao processar reserva.", "danger")
         return redirect(url_for('instrutor_bp.painel_instrutor'))
-
 
 @instrutor_bp.route('/minhas_reservas')
 @login_required
@@ -123,13 +118,11 @@ def minhas_reservas():
             """, (email_usuario,))
             reservas = cursor.fetchall()
 
-        # Converter timedelta para time para campos inicio e termino
         for reserva in reservas:
             if isinstance(reserva['inicio'], timedelta):
                 reserva['inicio'] = timedelta_to_time(reserva['inicio'])
             if isinstance(reserva['termino'], timedelta):
                 reserva['termino'] = timedelta_to_time(reserva['termino'])
-            # Se data_res for string, converta para datetime.date (se necessário)
             if isinstance(reserva['data_res'], str):
                 reserva['data_res'] = datetime.strptime(reserva['data_res'], '%Y-%m-%d').date()
 
@@ -139,30 +132,6 @@ def minhas_reservas():
         print("Erro ao buscar reservas do usuário:", e)
         flash("Erro ao carregar reservas.", "danger")
         return redirect(url_for('instrutor_bp.painel_instrutor'))
-@instrutor_bp.route('/cancelar_reserva/<int:id_res>', methods=['POST'])
-@login_required
-@role_required(['Instrutor', 'Administrador'])
-def cancelar_reserva(id_res):
-    motivo = request.form.get('motivo_cancelamento', '').strip()
-    
-    if not motivo:
-        flash('Motivo do cancelamento é obrigatório.', 'error')
-        return redirect(url_for('instrutor_bp.minhas_reservas'))
-
-    try:
-        db = get_db()
-        with db.cursor() as cursor:
-            cursor.execute("""
-                UPDATE reserva 
-                SET status_res = 'Cancelado', motivo_cancelamento = %s 
-                WHERE id_res = %s
-            """, (motivo, id_res))
-            db.commit()
-        flash('Reserva cancelada com sucesso.', 'success')
-    except Exception as e:
-        flash(f'Erro ao cancelar reserva: {e}', 'error')
-
-    return redirect(url_for('instrutor_bp.minhas_reservas'))
 
 @instrutor_bp.route('/cancelar_reserva', methods=['POST'])
 @login_required
@@ -171,6 +140,10 @@ def cancelar_reserva():
     id_reserva = request.form.get('id_reserva')
     motivo = request.form.get('motivo')
     
+    if not motivo:
+        flash('Motivo do cancelamento é obrigatório.', 'error')
+        return redirect(url_for('instrutor_bp.minhas_reservas'))
+
     db = get_db()
     try:
         with db.cursor() as cursor:
