@@ -1,39 +1,24 @@
 # app/db.py
 import pymysql
 from flask import g
-import logging
 
-# Configuração de logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
+# Configurações (poderia vir do config.py, se quiser)
 DB_CONFIG = {
     "host": "localhost",
     "user": "root",
     "port": 3306,
     "password": "lasanha",
     "database": "chronosala",
-    "port": 3306,
-    "cursorclass": pymysql.cursors.DictCursor,
-    "autocommit": True,
-    "connect_timeout": 10  # Adicionado timeout
+    "cursorclass": pymysql.cursors.DictCursor
 }
 
 def get_db():
-    """Obtém uma conexão com o banco de dados"""
-    if not hasattr(g, 'db'):
-        try:
-            logger.debug("Tentando conectar ao banco de dados...")
-            g.db = pymysql.connect(**DB_CONFIG)
-            logger.info("Conexão com o banco estabelecida com sucesso")
-        except pymysql.err.OperationalError as e:
-            logger.error(f"Erro de conexão: {e}")
-            raise RuntimeError("Não foi possível conectar ao banco de dados") from e
+    if 'db' not in g:
+        g.db = pymysql.connect(**DB_CONFIG)
     return g.db
 
 def close_db(e=None):
-    """Fecha a conexão com o banco de dados"""
-    db = getattr(g, 'db', None)
+    db = g.pop('db', None)
     if db is not None:
         db.close()
 
