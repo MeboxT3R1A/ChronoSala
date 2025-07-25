@@ -1,0 +1,35 @@
+{% extends 'base/index.html' %}
+
+{% block title %}Área do Instrutor{% endblock %}
+
+{% block content %}
+<h1>Bem-vindo, Instrutor {% if session.get('user_name') %}{{ session.get('user_name') }}{% endif %}!</h1>
+<p>Aqui você poderá visualizar as salas disponíveis para reserva.</p>
+<a href="{{ url_for('instrutor_bp.minhas_reservas') }}" class="btn-minhas-reservas">📅 Minhas Reservas</a>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<ul class="flash-messages">
+    {% for category, message in messages %}
+    <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% if salas %}
+<h2>Salas Disponíveis</h2>
+<div class="container">
+    {% for sala in salas %}
+    <div class="sala-card">
+        <h2>{{ sala.nome_sala }}</h2>
+        <a href="{{ url_for('instrutor_bp.nova_reserva', sala_id=sala.id_sala) }}">Reservar</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Nenhuma sala disponível no momento.</p>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
