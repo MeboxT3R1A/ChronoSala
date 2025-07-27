@@ -5,7 +5,6 @@
 {% block style %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/coordenador.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
 {% endblock %}
 
 {% block content %}
@@ -19,9 +18,18 @@
         </div>
     </div>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
     <div class="card">
-        <div class="filtros-container">
-            <!-- Form de busca geral -->
+        <div class="filtros-container" style="margin-top: 1rem;">
             <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}" class="search-form">
                 <div class="form-group">
                     <input type="text" name="busca" placeholder="Pesquisar Sala, ID ou Email" 
@@ -32,29 +40,6 @@
                 </button>
             </form>
 
-            <!-- Filtro por Sala -->
-            <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}" class="search-form">
-                <div class="form-group">
-                    <label>Filtrar por Sala:</label>
-                    <select name="sala" class="form-control">
-                        <option value="">Todas</option>
-                        {% for sala in salas %}
-                        <option value="{{ sala }}" {% if sala == sala_selecionada %}selected{% endif %}>{{ sala }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-secondary">Filtrar</button>
-            </form>
-
-            <!-- Filtro por Data -->
-            <form method="GET" action="{{ url_for('coordenador_bp.listar_reservas') }}" class="search-form">
-                <div class="form-group">
-                    <label>Filtrar por Data:</label>
-                    <input type="text" name="data" value="{{ data_selecionada }}" 
-                           class="form-control datepicker" placeholder="DD/MM/AAAA">
-                </div>
-                <button type="submit" class="btn btn-secondary">Filtrar</button>
-            </form>
         </div>
 
         <div class="table-responsive">
@@ -93,21 +78,21 @@
                             {% if reserva.status_res != 'cancelado' and reserva.status_chave == 'pendente' %}
                             <form method="POST" action="{{ url_for('coordenador_bp.entregar_chave', id_res=reserva.id_res) }}" 
                                   class="form-inline">
-                                <button type="submit" class="btn-key-action btn-primary">
+                                <button type="submit" class="btn btn-success btn-key-action">
                                     <i class="fas fa-key"></i> Entregar
                                 </button>
                             </form>
                             <form method="POST" action="{{ url_for('coordenador_bp.cancelar_reserva', id_res=reserva.id_res) }}" 
                                   class="form-inline"
                                   onsubmit="return confirm('Tem certeza que deseja cancelar esta reserva?');">
-                                <button type="submit" class="btn-key-action btn-danger">
+                                <button type="submit" class="btn btn-danger btn-key-action">
                                     <i class="fas fa-times"></i> Cancelar
                                 </button>
                             </form>
                             {% elif reserva.status_chave == 'Chave retirada' %}
                             <form method="POST" action="{{ url_for('coordenador_bp.devolver_chave', id_res=reserva.id_res) }}" 
                                   class="form-inline">
-                                <button type="submit" class="btn-key-action btn-success">
+                                <button type="submit" class="btn btn-primary btn-key-action">
                                     <i class="fas fa-key"></i> Devolver
                                 </button>
                             </form>
@@ -121,7 +106,6 @@
     </div>
 </div>
 
-<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
 <script src="{{ url_for('static', filename='js/coordenador.js') }}"></script>

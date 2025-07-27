@@ -1,8 +1,5 @@
-<!-- templates/instrutor/criar_reserva.html -->
 {% extends 'base/base.html' %}
-
 {% block title %}Criar Reserva{% endblock %}
-
 {% block style %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/instrutor.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -11,8 +8,10 @@
 {% block content %}
 <div class="container-coordenador">
     <div class="card">
-        <h2 class="form-title"><i class="fas fa-calendar-plus"></i> Nova Reserva</h2>
-        
+        <h1 class="page-title">
+            <i class="fas fa-calendar-plus"></i> Nova Reserva
+        </h1>
+
         <form method="POST" class="form-reserva" action="{{ url_for('instrutor_bp.criar_reserva') }}">
             <div class="form-group">
                 <label for="nome_sala">Sala:</label>
@@ -38,15 +37,18 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="data_reserva">Data:</label>
-                    <input type="text" name="data_reserva" id="data_reserva" class="form-control datepicker" placeholder="DD/MM/AAAA" required>
+                    <input type="text" name="data_reserva" id="data_reserva" class="form-control datepicker" 
+                           placeholder="DD/MM/AAAA" required>
                 </div>
                 <div class="form-group">
                     <label for="hora_inicio">Início:</label>
-                    <input type="text" name="hora_inicio" id="hora_inicio" class="form-control timepicker" placeholder="HH:MM" required>
+                    <input type="text" name="hora_inicio" id="hora_inicio" class="form-control timepicker" 
+                           placeholder="HH:MM" required>
                 </div>
                 <div class="form-group">
                     <label for="hora_fim">Término:</label>
-                    <input type="text" name="hora_fim" id="hora_fim" class="form-control timepicker" placeholder="HH:MM" required>
+                    <input type="text" name="hora_fim" id="hora_fim" class="form-control timepicker" 
+                           placeholder="HH:MM" required>
                 </div>
             </div>
 
@@ -54,8 +56,8 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Reservar
                 </button>
-                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}" class="btn btn-cancelar">
-                    Cancelar
+                <a href="{{ url_for('instrutor_bp.painel_instrutor') }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
                 </a>
             </div>
         </form>
@@ -65,7 +67,18 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
 <script>
-    flatpickr(".datepicker", { dateFormat: "d/m/Y", locale: "pt" });
-    flatpickr(".timepicker", { enableTime: true, noCalendar: true, dateFormat: "H:i" });
+    flatpickr(".datepicker", { 
+        dateFormat: "d/m/Y", 
+        locale: "pt",
+        minDate: "today"
+    });
+    flatpickr(".timepicker", { 
+        enableTime: true, 
+        noCalendar: true, 
+        dateFormat: "H:i",
+        minuteIncrement: 30,
+        minTime: "08:00",
+        maxTime: "20:00"
+    });
 </script>
 {% endblock %}

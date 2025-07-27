@@ -5,34 +5,32 @@ DROP DATABASE IF EXISTS chronosala;
 CREATE DATABASE chronosala;
 USE chronosala;
 
-CREATE TABLE funcionario (
-    email VARCHAR(60) PRIMARY KEY,
-    nome VARCHAR(60) NOT NULL,
-    matricula CHAR(5) UNIQUE,
-    -- ALTERADO: Aumenta o tamanho do campo senha para armazenar hashes de senha.
-    -- Um hash bcrypt geralmente tem cerca de 60 caracteres. VARCHAR(255) é um bom tamanho seguro.
-    senha VARCHAR(255) NOT NULL,
-    funcao VARCHAR(25) NOT NULL
-);
-
+-- 1. Bases independentes
 CREATE TABLE cep (
     nome VARCHAR(40) PRIMARY KEY,
     endereco VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE funcionario (
+    email VARCHAR(60) PRIMARY KEY,
+    nome VARCHAR(60) NOT NULL,
+    matricula CHAR(5) UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    funcao VARCHAR(25) NOT NULL
+);
+
+-- 2. Tabela que depende das duas acima
 CREATE TABLE cep_func (
     cep_func INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(60),
     nome VARCHAR(40),
-    FOREIGN KEY (email)
-        REFERENCES funcionario (email)
-        ON DELETE CASCADE,
-    FOREIGN KEY (nome)
-        REFERENCES cep (nome)
+    FOREIGN KEY (email) REFERENCES funcionario (email) ON DELETE CASCADE,
+    FOREIGN KEY (nome) REFERENCES cep (nome)
 );
 
+-- 3. Salas e Cursos (sem dependências)
 CREATE TABLE sala (
-	id_sala INT AUTO_INCREMENT PRIMARY KEY,
+    id_sala INT AUTO_INCREMENT PRIMARY KEY,
     nome_sala VARCHAR(150) NOT NULL,
     status_sala ENUM('reservado', 'disponivel','manutenção') DEFAULT 'disponivel'
 );
@@ -43,9 +41,10 @@ CREATE TABLE cursos (
     segmento VARCHAR(150) NOT NULL
 );
 
+-- 4. Reservas (depende de sala e funcionario)
 CREATE TABLE reserva (
     id_res INT PRIMARY KEY AUTO_INCREMENT,
-	id_sala INT,
+    id_sala INT,
     email VARCHAR(60),
     inicio TIME NOT NULL,
     termino TIME NOT NULL,
@@ -53,14 +52,11 @@ CREATE TABLE reserva (
     status_res ENUM('reservado', 'cancelado') DEFAULT 'reservado',
     status_chave ENUM('pendente', 'Chave retirada', 'Chave devolvida') DEFAULT 'pendente',
     CONSTRAINT chk_horario CHECK (inicio < termino),
-    FOREIGN KEY (id_sala)
-        REFERENCES sala (id_sala)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (email)
-        REFERENCES funcionario (email)
-        ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (id_sala) REFERENCES sala (id_sala) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (email) REFERENCES funcionario (email) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+-- 5. Histórico (depende de quase tudo)
 CREATE TABLE historico (
     id_historico INT PRIMARY KEY AUTO_INCREMENT,
     data_historico DATETIME NOT NULL,
@@ -69,34 +65,24 @@ CREATE TABLE historico (
     id_res INT,
     id_sala INT,
     id_cursos INT,
-    FOREIGN KEY (id_cursos)
-        REFERENCES cursos (id_cursos),
-    CONSTRAINT fk_login FOREIGN KEY (email)
-        REFERENCES funcionario (email)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (nome)
-        REFERENCES cep (nome),
-    FOREIGN KEY (id_res)
-        REFERENCES reserva (id_res)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (id_sala)
-        REFERENCES sala (id_sala)
-        ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (id_cursos) REFERENCES cursos (id_cursos),
+    FOREIGN KEY (email) REFERENCES funcionario (email) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (nome) REFERENCES cep (nome),
+    FOREIGN KEY (id_res) REFERENCES reserva (id_res) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (id_sala) REFERENCES sala (id_sala) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+-- 6. Controle de chaves (depende de reserva e funcionario)
 CREATE TABLE controle_chaves (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reserva INT,
     email_professor VARCHAR(60),
     data_entrega DATETIME,
     data_devolucao DATETIME,
-    FOREIGN KEY (id_reserva)
-        REFERENCES reserva (id_res)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (email_professor)
-        REFERENCES funcionario (email)
-        ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (id_reserva) REFERENCES reserva (id_res) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (email_professor) REFERENCES funcionario (email) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
 
 -- Para inserir senhas, você DEVE HASHEAR.
 -- Execute o Python para gerar os hashes:

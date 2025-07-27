@@ -1,22 +1,46 @@
-<!-- templates/instrutor/painel_instrutor.html -->
 {% extends 'base/base.html' %}
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/instrutor.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2 class="mb-4">Painel do Instrutor</h2>
+<div class="container-coordenador">
+    <h1 class="page-title">
+        <i class="fas fa-chalkboard-teacher"></i> Painel do Instrutor
+    </h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
     <div class="row">
         {% for sala in salas %}
         <div class="col-md-4">
-            <div class="card mb-4 shadow-sm border rounded-3">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ sala.nome_sala }}</h5>
-                    <p class="card-text">Status: <strong>{{ sala.status_sala }}</strong></p>
+                    <h3 class="card-title">{{ sala.nome_sala }}</h3>
+                    <p class="mb-3">
+                        <span class="status-badge status-{{ sala.status_sala|lower|replace(' ', '-') }}">
+                            {{ sala.status_sala|capitalize }}
+                        </span>
+                    </p>
                     <a href="{{ url_for('instrutor_bp.criar_reserva') }}?sala_id={{ sala.id_sala }}"
-                        class="btn btn-primary w-100">Reservar</a>
+                       class="btn btn-primary">
+                        <i class="fas fa-calendar-plus"></i> Reservar
+                    </a>
                 </div>
             </div>
         </div>
         {% else %}
-        <p>Nenhuma sala disponível.</p>
+        <div class="empty-state">
+            <p>Nenhuma sala disponível no momento.</p>
+        </div>
         {% endfor %}
     </div>
 </div>

@@ -1,64 +1,97 @@
-<!-- templates/instrutor/minhas_reservas.html -->
 {% extends 'base/base.html' %}
-{% block content %}
-<h2>Minhas Reservas</h2>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Sala</th>
-      <th>Data</th>
-      <th>Início</th>
-      <th>Fim</th>
-      <th>Status</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for reserva in reservas %}
-    <tr>
-      <td>{{ reserva.nome_sala }}</td>
-      <td>{{ reserva.data_reserva }}</td>
-      <td>{{ reserva.hora_inicio }}</td>
-      <td>{{ reserva.hora_fim }}</td>
-      <td>{{ reserva.status_reserva }}</td>
-      <td>
-        {% if reserva.status_reserva == 'reservado' %}
-        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelarModal" data-id="{{ reserva.id_res }}">Cancelar</button>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/instrutor.css') }}">
+{% endblock %}
 
-<!-- Modal Cancelar -->
-<div class="modal fade" id="cancelarModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form method="POST" action="{{ url_for('instrutor_bp.cancelar_reserva') }}">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirmar Cancelamento</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <p>Deseja cancelar esta reserva?</p>
-          <input type="hidden" name="id_reserva" id="modal-id-reserva">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="submit" class="btn btn-danger">Cancelar</button>
-        </div>
-      </form>
+{% block content %}
+<div class="container-coordenador">
+    <h1 class="page-title">
+        <i class="fas fa-calendar-alt"></i> Minhas Reservas
+    </h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sala</th>
+                    <th>Data</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reserva in reservas %}
+                <tr>
+                    <td>{{ reserva.nome_sala }}</td>
+                    <td>{{ reserva.data_reserva.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ reserva.hora_inicio.strftime('%H:%M') }}</td>
+                    <td>{{ reserva.hora_fim.strftime('%H:%M') }}</td>
+                    <td>
+                        <span class="status-badge status-{{ reserva.status_reserva|lower }}">
+                            {{ reserva.status_reserva|capitalize }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if reserva.status_reserva == 'reservado' %}
+                        <button class="btn btn-danger" data-bs-toggle="modal" 
+                                data-bs-target="#cancelarModal" data-id="{{ reserva.id_res }}">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </div>
+
+    <!-- Modal Cancelar -->
+    <div class="modal fade" id="cancelarModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST" action="{{ url_for('instrutor_bp.cancelar_reserva') }}">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-exclamation-triangle"></i> Confirmar Cancelamento
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza que deseja cancelar esta reserva?</p>
+                        <input type="hidden" name="id_reserva" id="modal-id-reserva">
+                    </div>  
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Fechar
+                        </button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Confirmar Cancelamento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-  const cancelarModal = document.getElementById('cancelarModal');
-  cancelarModal.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;
-    const id = button.getAttribute('data-id');
-    document.getElementById('modal-id-reserva').value = id;
-  });
+    const cancelarModal = document.getElementById('cancelarModal');
+    cancelarModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-id');
+        document.getElementById('modal-id-reserva').value = id;
+    });
 </script>
 {% endblock %}
